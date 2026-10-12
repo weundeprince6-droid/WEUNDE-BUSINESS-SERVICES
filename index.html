@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ESE DB</title>
+<title>WEB SERVICE — Suivi des ventes</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f6b4f">
+<meta name="theme-color" content="#14543f">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,19 +14,24 @@
 <link rel="icon" href="icons/icon-192.png">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#f3f6f4;--card:#fff;--ink:#14231c;--mut:#5d6f66;--line:#d5dfd9;--pri:#0f6b4f;--onpri:#fff;--neg:#b3261e}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1512;--card:#17211c;--ink:#e8f0ec;--mut:#93a89d;--line:#2a3931;--pri:#3fbf95;--onpri:#06231a;--neg:#ff8a80}}
-:root[data-theme="dark"]{--bg:#0e1512;--card:#17211c;--ink:#e8f0ec;--mut:#93a89d;--line:#2a3931;--pri:#3fbf95;--onpri:#06231a;--neg:#ff8a80}
+--bg:#eef1ec;--card:#fff;--ink:#16261e;--mut:#5f7468;--line:#d7ddd5;--pri:#14543f;--onpri:#f4f1e6;--neg:#a8341f;--gold:#b3862c;--serif:Georgia,"Noto Serif","Times New Roman",serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a15;--card:#182720;--ink:#e8f0ec;--mut:#93a89d;--line:#2a3931;--pri:#4caf8a;--onpri:#0a1a14;--neg:#ff9478;--gold:#d9ad5c}}
+:root[data-theme="dark"]{--bg:#101a15;--card:#182720;--ink:#e8f0ec;--mut:#93a89d;--line:#2a3931;--pri:#4caf8a;--onpri:#0a1a14;--neg:#ff9478;--gold:#d9ad5c}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 main{max-width:640px;margin:0 auto;padding:16px}
 h1{font-size:1.35rem;margin:4px 0 12px}
 h2{font-size:1rem;margin:0 0 10px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:14px}
 .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tabs button{flex:0 0 auto;min-width:72px;padding:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;font:inherit;font-weight:600}
-.tabs button[aria-selected="true"]{background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+.tabs button{flex:0 0 auto;min-width:72px;padding:10px 10px 8px;border:1px solid var(--line);border-bottom:3px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;font:inherit;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--card);color:var(--pri);border-color:var(--line);border-bottom-color:var(--pri)}
+.brandbar{display:flex;align-items:center;gap:10px;margin:2px 0 14px}
+.seal{flex:0 0 auto;width:40px;height:40px;border-radius:50%;background:var(--pri);color:var(--onpri);display:flex;align-items:center;justify-content:center;font:700 .95rem/1 var(--serif);letter-spacing:.5px;box-shadow:inset 0 0 0 2px rgba(244,241,230,.35)}
+.seal.lg{width:56px;height:56px;font-size:1.25rem}
+.brandname{font:700 1.15rem/1.15 var(--serif);color:var(--ink);margin:0}
+.brandtag{font-size:.78rem;color:var(--mut);margin:2px 0 0}
 .pwbox{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;letter-spacing:2px;min-height:1.2em;cursor:text}
 .pwbox:focus-within,.pwbox.foc{outline:3px solid var(--pri);outline-offset:1px}
 .pwcaret{opacity:0;margin-left:1px}
@@ -38,9 +43,9 @@ input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:
 button.go{width:100%;margin-top:12px;padding:12px;border:0;border-radius:8px;background:var(--pri);color:var(--onpri);font:inherit;font-weight:700}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--pri);outline-offset:1px}
 .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
-.sum div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 4px}
+.sum div{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--pri);border-radius:8px;padding:10px 4px}
 .sum small{display:block;color:var(--mut);font-size:.75rem}
-.sum b{font-size:1.1rem}
+.sum b{font:700 1.1rem/1.2 var(--serif)}
 .neg{color:var(--neg)}
 .list{list-style:none;margin:0;padding:0}
 .list li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--line)}
@@ -79,7 +84,13 @@ button:disabled{opacity:.45}
 </head>
 <body>
 <div id="lk">
-<div class="card" style="width:100%;max-width:360px;margin:0">
+<div style="width:100%;max-width:360px">
+<div style="text-align:center;margin-bottom:18px">
+<div class="seal lg" style="margin:0 auto 10px">WS</div>
+<p class="brandname" style="font-size:1.3rem">WEB SERVICE</p>
+<p class="brandtag">Secrétariat public &amp; papeterie — Goma</p>
+</div>
+<div class="card" style="margin:0">
 <h2 id="lkt">Chargement…</h2>
 <p class="empty" id="lkm" style="margin-bottom:6px"></p>
 <div id="lkf" hidden>
@@ -95,6 +106,7 @@ button:disabled{opacity:.45}
 </div>
 </div>
 </div>
+</div>
 <div id="dlg" hidden>
 <div class="card" style="width:100%;max-width:360px;margin:0">
 <h2 id="dlgt" style="margin:0 0 8px"></h2>
@@ -107,8 +119,15 @@ button:disabled{opacity:.45}
 </div>
 </div>
 <main>
-<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h1>Suivi des ventes</h1><button class="x" id="lkn" style="font-size:.85rem;border:1px solid var(--line);border-radius:8px;color:var(--ink)">Verrouiller</button></div>
-<p class="empty" id="mode" style="margin:-6px 0 12px">Mode local : les données sont seulement sur cet appareil.</p>
+<div class="brandbar">
+<div class="seal">WS</div>
+<div style="flex:1;min-width:0">
+<p class="brandname">WEB SERVICE</p>
+<p class="brandtag" style="margin-top:0">Suivi des ventes</p>
+</div>
+<button class="x" id="lkn" style="font-size:.85rem;border:1px solid var(--line);border-radius:8px;color:var(--ink)">Verrouiller</button>
+</div>
+<p class="empty" id="mode" style="margin:-10px 0 12px">Mode local : les données sont seulement sur cet appareil.</p>
 <span class="role-badge" id="rolebadge">Accès employé — saisie du jour seulement</span>
 <div class="sum" id="dash" style="margin-bottom:14px">
 <div><small>Ventes du jour</small><b id="dashV">—</b></div>
@@ -1609,4 +1628,3 @@ render();gate();bump();
 </script>
 </body>
 </html>
-<!-- test connexion Claude Mon Oct 12 23:49:51 CEST 2026 -->

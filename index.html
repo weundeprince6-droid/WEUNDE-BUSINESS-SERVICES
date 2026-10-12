@@ -14,9 +14,9 @@
 <link rel="icon" href="icons/icon-192.png">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#eef1ec;--card:#fff;--ink:#16261e;--mut:#5f7468;--line:#d7ddd5;--pri:#14543f;--onpri:#f4f1e6;--neg:#a8341f;--gold:#b3862c;--serif:Georgia,"Noto Serif","Times New Roman",serif}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a15;--card:#182720;--ink:#e8f0ec;--mut:#93a89d;--line:#2a3931;--pri:#4caf8a;--onpri:#0a1a14;--neg:#ff9478;--gold:#d9ad5c}}
-:root[data-theme="dark"]{--bg:#101a15;--card:#182720;--ink:#e8f0ec;--mut:#93a89d;--line:#2a3931;--pri:#4caf8a;--onpri:#0a1a14;--neg:#ff9478;--gold:#d9ad5c}
+--bg:#f3e8cf;--card:#fffdf8;--ink:#2a2117;--mut:#7a6f58;--line:#e2d3ab;--pri:#1d3557;--onpri:#f6f1e4;--neg:#b23b1d;--gold:#b3862c;--serif:Georgia,"Noto Serif","Times New Roman",serif;--numfont:"Arial Black","Arial Bold",Gadget,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1812;--card:#24211a;--ink:#f1ead9;--mut:#b6a98a;--line:#3a3526;--pri:#6f9bd1;--onpri:#0e1b2c;--neg:#ff8f6b;--gold:#d9ad5c}}
+:root[data-theme="dark"]{--bg:#1a1812;--card:#24211a;--ink:#f1ead9;--mut:#b6a98a;--line:#3a3526;--pri:#6f9bd1;--onpri:#0e1b2c;--neg:#ff8f6b;--gold:#d9ad5c}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -45,7 +45,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
 .sum div{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--pri);border-radius:8px;padding:10px 4px}
 .sum small{display:block;color:var(--mut);font-size:.75rem}
-.sum b{font:700 1.1rem/1.2 var(--serif)}
+.sum b{font:900 1.15rem/1.2 var(--numfont)}
 .neg{color:var(--neg)}
 .list{list-style:none;margin:0;padding:0}
 .list li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--line)}

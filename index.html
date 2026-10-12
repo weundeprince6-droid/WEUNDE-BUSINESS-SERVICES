@@ -23,27 +23,27 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-ap
 main{max-width:640px;margin:0 auto;padding:16px}
 h1{font-size:1.35rem;margin:4px 0 12px}
 h2{font-size:1rem;margin:0 0 10px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:14px}
-.tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tabs button{flex:0 0 auto;min-width:72px;padding:10px 10px 8px;border:1px solid var(--line);border-bottom:3px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;font:inherit;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:16px;box-shadow:0 2px 6px rgba(28,20,9,.12)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.tabs button{flex:1 1 calc(20% - 6px);min-width:64px;padding:9px 4px 7px;border:1px solid var(--line);border-bottom:3px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;font:inherit;font-weight:600}
 .tabs button[aria-selected="true"]{background:var(--card);color:var(--pri);border-color:var(--line);border-bottom-color:var(--pri)}
 .brandbar{display:flex;align-items:center;gap:10px;margin:2px 0 14px}
 .seal{flex:0 0 auto;width:40px;height:40px;border-radius:50%;background:var(--pri);color:var(--onpri);display:flex;align-items:center;justify-content:center;font:700 .95rem/1 var(--serif);letter-spacing:.5px;box-shadow:inset 0 0 0 2px rgba(244,241,230,.35)}
 .seal.lg{width:56px;height:56px;font-size:1.25rem}
 .brandname{font:700 1.15rem/1.15 var(--serif);color:var(--ink);margin:0}
 .brandtag{font-size:.78rem;color:var(--mut);margin:2px 0 0}
-.pwbox{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;letter-spacing:2px;min-height:1.2em;cursor:text}
+.pwbox{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;letter-spacing:2px;min-height:1.2em;cursor:text}
 .pwbox:focus-within,.pwbox.foc{outline:3px solid var(--pri);outline-offset:1px}
 .pwcaret{opacity:0;margin-left:1px}
 .pwcaret.on{opacity:1;animation:pwblink 1s steps(1) infinite}
 @keyframes pwblink{50%{opacity:0}}
 label{display:block;font-size:.85rem;color:var(--mut);margin:8px 0 3px}
-input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 button.go{width:100%;margin-top:12px;padding:12px;border:0;border-radius:8px;background:var(--pri);color:var(--onpri);font:inherit;font-weight:700}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--pri);outline-offset:1px}
 .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
-.sum div{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--pri);border-radius:8px;padding:10px 4px}
+.sum div{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--pri);border-radius:8px;padding:10px 4px;box-shadow:0 2px 6px rgba(28,20,9,.12)}
 .sum small{display:block;color:var(--mut);font-size:.75rem}
 .sum b{font:900 1.15rem/1.2 var(--numfont)}
 .neg{color:var(--neg)}
@@ -59,7 +59,7 @@ table{width:100%;border-collapse:collapse;font-size:.92rem}
 th,td{padding:7px 6px;text-align:right;border-top:1px solid var(--line)}
 th:first-child,td:first-child{text-align:left}
 th{color:var(--mut);font-weight:600;border-top:0}
-.top{display:flex;gap:10px;align-items:end}
+.top{display:flex;gap:14px;align-items:end;flex-wrap:wrap}
 .top>div{flex:1}
 .tabs button{font-size:.82rem;padding:10px 2px}
 svg.ch{width:100%;height:auto;display:block}

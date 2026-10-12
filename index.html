@@ -32,6 +32,11 @@ h2{font-size:1rem;margin:0 0 10px}
 .seal.lg{width:56px;height:56px;font-size:1.25rem}
 .brandname{font:700 1.15rem/1.15 var(--serif);color:var(--ink);margin:0}
 .brandtag{font-size:.78rem;color:var(--mut);margin:2px 0 0}
+.modepill{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:var(--mut);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 10px;margin:0 0 14px;box-shadow:0 1px 4px rgba(28,20,9,.1)}
+.modepill .dot{width:7px;height:7px;border-radius:50%;background:var(--mut);flex:0 0 auto}
+.modepill.live{color:var(--pri)}
+.modepill.live .dot{background:#2f9e5c;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .pwbox{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;letter-spacing:2px;min-height:1.2em;cursor:text}
 .pwbox:focus-within,.pwbox.foc{outline:3px solid var(--pri);outline-offset:1px}
 .pwcaret{opacity:0;margin-left:1px}
@@ -127,7 +132,7 @@ button:disabled{opacity:.45}
 </div>
 <button class="x" id="lkn" style="font-size:.85rem;border:1px solid var(--line);border-radius:8px;color:var(--ink)">Verrouiller</button>
 </div>
-<p class="empty" id="mode" style="margin:-10px 0 12px">Mode local : les données sont seulement sur cet appareil.</p>
+<p class="modepill" id="mode"><span class="dot"></span><span id="modetxt">Mode local : les données sont seulement sur cet appareil.</span></p>
 <span class="role-badge" id="rolebadge">Accès employé — saisie du jour seulement</span>
 <div class="sum" id="dash" style="margin-bottom:14px">
 <div><small>Ventes du jour</small><b id="dashV">—</b></div>
@@ -1520,7 +1525,7 @@ DB=d;S={sales:[],exp:[],cur:'FC',stock:[],debts:[],credits:[],clients:[],ristour
 S.workers=[];S.suppliers=[];S.wStored=false;
 ready=false;PW=null;if(M!=='change')gate();
 setTimeout(()=>{if(!ready&&M==='load')msg('Connexion lente : vérifiez Internet.')},8000);
-$('mode').textContent='Mode partagé : les ventes se synchronisent en temps réel entre les téléphones.';
+$('mode').classList.add('live');$('modetxt').textContent='Mode partagé : les ventes se synchronisent en temps réel entre les téléphones.';
 try{if(localStorage.getItem('suivi-ventes'))$('mg').hidden=false}catch(e){}
 d.collection('days').onSnapshot(snap=>{
 const sa=[],ex=[],mv=[],rr=[],ma=[];

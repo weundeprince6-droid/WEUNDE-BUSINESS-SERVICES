@@ -304,15 +304,19 @@ button:disabled{opacity:.45}
 <h2>Ajouter une commande</h2>
 <label for="ocl">Client</label>
 <select id="ocl"></select>
-<label for="opn">Produit</label>
+<label for="otype">Type de commande</label>
+<select id="otype"><option value="produit">Produit (du stock)</option><option value="service">Service (frappe, impression, reliure…)</option></select>
+<div id="ofp"><label for="opn">Produit</label>
 <div class="ac-wrap"><input id="opn" placeholder="Ex. Cahier 96 pages" autocomplete="off"><div class="ac-list" id="opn_ac" hidden></div></div>
+<label for="oq">Quantité</label><input id="oq" type="number" inputmode="decimal" min="0.01" value="1"></div>
+<div id="ofs" hidden><label for="osv">Service</label><input id="osv" placeholder="Ex. Frappe de document, 3 pages"></div>
 <div class="row">
-<div><label for="oq">Quantité</label><input id="oq" type="number" inputmode="decimal" min="0.01" value="1"></div>
-<div><label for="oa">Prix unitaire</label><input id="oa" type="number" inputmode="decimal" min="0"></div>
+<div><label for="oa">Prix</label><input id="oa" type="number" inputmode="decimal" min="0"></div>
+<div><label for="oc">Devise</label><select id="oc"><option value="FC">Francs (FC)</option><option value="USD">Dollars ($)</option></select></div>
 </div>
 <div class="row">
-<div><label for="oc">Devise</label><select id="oc"><option value="FC">Francs (FC)</option><option value="USD">Dollars ($)</option></select></div>
 <div><label for="opay">Paiement</label><select id="opay"><option value="cash">Payé cash</option><option value="credit">À crédit</option></select></div>
+<div id="ofst" hidden><label for="ost">Avancement</label><select id="ost"><option value="attente">En attente</option><option value="cours">En cours</option><option value="pret">Prêt</option></select></div>
 </div>
 <label for="onote">Note (facultatif)</label>
 <input id="onote" placeholder="Ex. urgent, livraison à domicile">
@@ -981,13 +985,20 @@ const r=await askFields('Corriger la vente',x.name,[{id:'sv_q',label:'Quantité'
 if(!r)return;
 if(r.sv_q===x.q&&r.sv_p===x.p&&r.sv_c===(x.c||'FC')){alert('Rien n’a changé.');return}
 putItem(x.d,x.id,{k:'s',name:x.name,cat:x.cat,q:r.sv_q,p:r.sv_p,c:r.sv_c,cl:x.cl||'',note:x.note||'',q0:x.q,p0:x.p,c0:x.c||'FC',mod:1})});
+$('otype').addEventListener('change',()=>{
+const sv=$('otype').value==='service';
+$('ofp').hidden=sv;$('ofs').hidden=!sv;$('ofst').hidden=!sv||$('opay').value!=='credit';
+if(sv)$('ost').value='attente'});
+$('opay').addEventListener('change',()=>{$('ofst').hidden=$('otype').value!=='service'||$('opay').value!=='credit'});
 $('addO').onclick=async()=>{
-const cl=$('ocl').value,pname=$('opn').value.trim(),q=parseFloat($('oq').value),note=$('onote').value.trim(),pay=$('opay').value;
+const cl=$('ocl').value,svc=$('otype').value==='service',pname=$('opn').value.trim(),service=$('osv').value.trim(),q=svc?1:parseFloat($('oq').value),note=$('onote').value.trim(),pay=$('opay').value,statut=$('ost').value;
 let price=parseFloat($('oa').value),c=$('oc').value;
 if(!cl){alert('Ajoutez d’abord un client ci-dessus.');return}
-if(!pname){alert('Indiquez le produit commandé.');return}
-if(!(q>0)){alert('Indiquez la quantité.');return}
-if(isNaN(price)||price<0){alert('Indiquez le prix unitaire.');return}
+if(svc){if(!service){alert('Indiquez le service commandé.');return}}
+else{if(!pname){alert('Indiquez le produit commandé.');return}
+if(!(q>0)){alert('Indiquez la quantité.');return}}
+if(isNaN(price)||price<0){alert('Indiquez le prix.');return}
+if(!svc){
 const sp=S.stock.find(x=>key(x.name)===key(pname));
 if(sp&&q>level(sp)&&!(await askConfirm('Stock insuffisant : il reste '+level(sp)+'. Enregistrer la commande quand même ?')))return;
 if(sp&&sp.sell>0&&(price!==sp.sell||c!==(sp.sellC||'FC'))){
@@ -996,10 +1007,15 @@ const r=await askFields('Prix différent du stock','Prix habituel de ce produit 
 if(!r)return;
 if(r.ochoice==='stock'){price=sp.sell;c=sp.sellC||'FC'}
 }
-findOrCreateStock(pname);
-if(pay==='cash'){putItem(today(),uid(),{k:'s',name:pname,cat:'Commande client',q,p:price,c,cl,note})}
+findOrCreateStock(pname)}
+if(svc){
+const id=uid(),amt=price,data={who:cl,note,amt,d:today(),c,service,statut};
+if(pay==='cash')data.pay={[uid()]:{a:amt,d:today()}};
+cfg({credits:{[id]:data}});
+if(pay==='cash')putItem(today(),uid(),{k:'m',type:'in',name:'Paiement client – '+cl+' – '+service,a:amt,c,cl})
+}else if(pay==='cash'){putItem(today(),uid(),{k:'s',name:pname,cat:'Commande client',q,p:price,c,cl,note})}
 else{cfg({credits:{[uid()]:{who:cl,note,amt:q*price,d:today(),c,pname,qty:q}}})}
-$('onote').value='';$('oa').value='';$('opn').value='';$('oq').value=1};
+$('onote').value='';$('oa').value='';$('opn').value='';$('oq').value=1;$('osv').value=''};
 const restc=x=>Math.max(0,x.amt-x.pay);
 function payCredit(y,n){
 const x=S.credits.find(v=>v.id===y);if(!x)return false;
@@ -1008,15 +1024,17 @@ if(n>restc(x)){alert('Le montant dépasse ce qui reste dû.');return false}
 cfg({credits:{[y]:{pay:{[uid()]:{a:n,d:today()}}}}});
 putItem(today(),uid(),{k:'m',type:'in',name:'Paiement client – '+x.who+(x.note?' – '+x.note:''),a:n,c:x.c||'FC',cl:x.who});
 return true}
+const STLAB={attente:'En attente',cours:'En cours',pret:'Prêt'},STNEXT={attente:'cours',cours:'pret',pret:'attente'};
 function renderCredits(){
 const op=S.credits.filter(x=>restc(x)>0),dn=S.credits.filter(x=>restc(x)<=0);
 const total=op.reduce((s,x)=>s+cv(restc(x),x.c),0);
-const li=x=>`<li><span class="t">${esc(x.who)}${x.pname?' · '+x.qty+' × '+esc(x.pname):(x.note?' · '+esc(x.note):'')}<small>depuis le ${x.d.slice(8)}/${x.d.slice(5,7)} · payé ${fmtc(x.pay,x.c)} sur ${fmtc(x.amt,x.c)}${x.mod?' · corrigé (avant : '+fmtc(x.amt0,x.c0)+')':''}</small></span><b class="${restc(x)>0?'neg':''}">${restc(x)>0?fmtc(restc(x),x.c):'Soldé'}</b>${restc(x)>0?'<button class="x" data-cy="'+x.id+'" style="font-weight:700;color:var(--pri);font-size:.95rem">Payer</button>':''}${x.d===today()&&x.pay===0&&!x.mod?'<button class="x" data-cm="'+x.id+'" aria-label="Corriger" style="font-size:.85rem;color:var(--pri);font-weight:700">Corriger</button>':''}${x.d===today()&&x.pay===0?'<button class="x" data-cz="'+x.id+'" aria-label="Supprimer">✕</button>':''}</li>`;
+const li=x=>`<li><span class="t">${esc(x.who)}${x.service?' · '+esc(x.service):(x.pname?' · '+x.qty+' × '+esc(x.pname):(x.note?' · '+esc(x.note):''))}<small>depuis le ${x.d.slice(8)}/${x.d.slice(5,7)} · payé ${fmtc(x.pay,x.c)} sur ${fmtc(x.amt,x.c)}${x.mod?' · corrigé (avant : '+fmtc(x.amt0,x.c0)+')':''}</small>${x.statut&&restc(x)>0?'<small><button class="x" data-cs="'+x.id+'" style="padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:.72rem;color:var(--pri);background:var(--card)">'+STLAB[x.statut]+' — changer</button></small>':''}</span><b class="${restc(x)>0?'neg':''}">${restc(x)>0?fmtc(restc(x),x.c):'Soldé'}</b>${restc(x)>0?'<button class="x" data-cy="'+x.id+'" style="font-weight:700;color:var(--pri);font-size:.95rem">Payer</button>':''}${x.d===today()&&x.pay===0&&!x.mod?'<button class="x" data-cm="'+x.id+'" aria-label="Corriger" style="font-size:.85rem;color:var(--pri);font-weight:700">Corriger</button>':''}${x.d===today()&&x.pay===0?'<button class="x" data-cz="'+x.id+'" aria-label="Supprimer">✕</button>':''}</li>`;
 const html=op.length?op.slice().sort((a,b)=>a.d<b.d?-1:1).map(li).join(''):'<li class="empty">Aucun crédit en cours.</li>';
 $('crl').innerHTML=html;$('crl2').innerHTML=html;
 $('crd').innerHTML=dn.length?dn.slice(-10).reverse().map(li).join(''):'<li class="empty">Rien de soldé pour le moment.</li>';
 $('crsum').textContent=total>0?'Total dû par les clients : '+fmt(total):'Aucune créance en cours.'}
 document.addEventListener('click',async e=>{const d=e.target.dataset||{};
+if(d.cs){const x=S.credits.find(v=>v.id===d.cs);if(!x)return;cfg({credits:{[d.cs]:{statut:STNEXT[x.statut]||'attente'}}})}
 if(d.cy){const x=S.credits.find(v=>v.id===d.cy);if(!x)return;
 const r=await askFields('Paiement du client',x.who+(x.note?' – '+x.note:''),[{id:'cp_n',label:'Montant payé (reste dû : '+fmtc(restc(x),x.c)+')',type:'number',value:restc(x),min:0.01}]);
 if(r)payCredit(d.cy,r.cp_n)}
@@ -1482,7 +1500,8 @@ else if(i<0)S.emps.push({id,name:v.name||'',username:v.username||'',phone:v.phon
 else Object.assign(S.emps[i],v)}
 if(p.credits)for(const id in p.credits){const v=p.credits[id],i=S.credits.findIndex(s=>s.id===id);
 if(v===null){if(i>=0)S.credits.splice(i,1)}
-else{if(i<0)S.credits.push({id,c:v.c||'FC',who:v.who,note:v.note||'',amt:v.amt,d:v.d,pname:v.pname||'',qty:v.qty||0,pay:0});const j=S.credits.findIndex(s=>s.id===id);
+else{if(i<0)S.credits.push({id,c:v.c||'FC',who:v.who,note:v.note||'',amt:v.amt,d:v.d,pname:v.pname||'',qty:v.qty||0,service:v.service||'',statut:v.statut||'',pay:0});const j=S.credits.findIndex(s=>s.id===id);
+if('statut' in v)S.credits[j].statut=v.statut;
 if(v.pay)for(const q in v.pay)S.credits[j].pay+=v.pay[q].a;
 if(v.mod){S.credits[j].amt=v.amt;S.credits[j].c=v.c;S.credits[j].amt0=v.amt0;S.credits[j].c0=v.c0;S.credits[j].mod=1}}}
 if(p.maintenance)for(const id in p.maintenance){const v=p.maintenance[id],i=S.maintenance.findIndex(s=>s.id===id);
@@ -1514,7 +1533,7 @@ const by={},put=(d,id,v)=>{if(okd(d))(by[d]=by[d]||{})[id]=v};
 for(const d in by)await putDoc(DB.doc('days/'+d),{items:by[d]});
 const st={};(o.stock||[]).forEach(q=>{st[q.id]={name:q.name,start:q.start,min:q.min,buy:q.buy||0,buyC:q.buyC||'FC',sell:q.sell||0,sellC:q.sellC||'FC',cat:q.cat||'',ins:q.in?{mig:{q:q.in,d:''}}:{}}});
 const ds={};(o.debts||[]).forEach(x=>{ds[x.id]={k:x.k,c:x.c||'FC',who:x.who,note:x.note||'',amt:x.amt,d:x.d,m:x.m||''};if(x.pay>0)ds[x.id].pay={mig:{a:x.pay,d:x.d}}});
-const crds={};(o.credits||[]).forEach(x=>{crds[x.id]={c:x.c||'FC',who:x.who,note:x.note||'',amt:x.amt,d:x.d,pname:x.pname||'',qty:x.qty||0};if(x.pay>0)crds[x.id].pay={mig:{a:x.pay,d:x.d}}});
+const crds={};(o.credits||[]).forEach(x=>{crds[x.id]={c:x.c||'FC',who:x.who,note:x.note||'',amt:x.amt,d:x.d,pname:x.pname||'',qty:x.qty||0,service:x.service||'',statut:x.statut||''};if(x.pay>0)crds[x.id].pay={mig:{a:x.pay,d:x.d}}});
 const mnt={};(o.maintenance||[]).forEach(x=>{mnt[x.id]={name:x.name,note:x.note||'',cost:x.cost,c:x.c||'FC',d:x.d};if(x.pay>0)mnt[x.id].pay={mig:{a:x.pay,d:x.d}}});
 const c={stock:st,debts:ds,credits:crds,maintenance:mnt};if(o.workers&&o.wStored){c.workers={};o.workers.forEach(x=>c.workers[x.id]={name:x.name})}if(o.suppliers&&o.suppliers.length){c.suppliers={};o.suppliers.forEach(x=>c.suppliers[x.id]={name:x.name})}if(o.clients&&o.clients.length){c.clients={};o.clients.forEach(x=>c.clients[x.id]={name:x.name})}if(o.ristGroups&&o.ristGroups.length){c.ristGroups={};o.ristGroups.forEach(x=>c.ristGroups[x.id]={name:x.name})}if(o.cur)c.cur=o.cur;c.open=nopen(o.cash&&o.cash.open);if(o.rate)c.rate=o.rate;
 await putDoc(DB.doc('cfg/main'),c);
@@ -1550,7 +1569,7 @@ S.locaux=Object.entries(c.locaux||{}).filter(e=>e[1]).map(([id,v])=>({id,name:v.
 S.ristGroups=Object.entries(c.ristGroups||{}).filter(e=>e[1]).map(([id,v])=>({id,name:v.name}));
 S.ristLoans=Object.entries(c.ristLoans||{}).filter(e=>e[1]).map(([id,v])=>{const payRecs=Object.entries(v.pay||{}).map(([rid,e])=>({id:rid,a:+(e&&e.a)||0,d:(e&&e.d)||''}));return{id,g:v.g||'',note:v.note||'',amount:+v.amount||0,principal:v.principal!=null?+v.principal:+v.amount||0,c:v.c||'FC',rate:+v.rate||0,due:v.due||'',schedule:v.schedule||[],d:v.d||'',mod:!!v.mod,amount0:+v.amount0||0,c0:v.c0||'FC',payRecs,pay:payRecs.reduce((s,r)=>s+r.a,0)}});
 S.debts=Object.entries(c.debts||{}).filter(e=>e[1]).map(([id,v])=>({id,k:v.k,c:v.c||'FC',who:v.who||'',note:v.note||'',amt:+v.amt||0,d:v.d||'',m:v.m||'',mod:!!v.mod,amt0:+v.amt0||0,c0:v.c0||'FC',pay:Object.values(v.pay||{}).reduce((a,b)=>a+(+(b&&b.a)||0),0)}));
-S.credits=Object.entries(c.credits||{}).filter(e=>e[1]).map(([id,v])=>({id,c:v.c||'FC',who:v.who||'',note:v.note||'',amt:+v.amt||0,d:v.d||'',pname:v.pname||'',qty:+v.qty||0,mod:!!v.mod,amt0:+v.amt0||0,c0:v.c0||'FC',pay:Object.values(v.pay||{}).reduce((a,b)=>a+(+(b&&b.a)||0),0)}));
+S.credits=Object.entries(c.credits||{}).filter(e=>e[1]).map(([id,v])=>({id,c:v.c||'FC',who:v.who||'',note:v.note||'',amt:+v.amt||0,d:v.d||'',pname:v.pname||'',qty:+v.qty||0,service:v.service||'',statut:v.statut||'',mod:!!v.mod,amt0:+v.amt0||0,c0:v.c0||'FC',pay:Object.values(v.pay||{}).reduce((a,b)=>a+(+(b&&b.a)||0),0)}));
 S.maintenance=Object.entries(c.maintenance||{}).filter(e=>e[1]).map(([id,v])=>({id,name:v.name||'',note:v.note||'',cost:+v.cost||0,c:v.c||'FC',d:v.d||'',mod:!!v.mod,cost0:+v.cost0||0,c0:v.c0||'FC',pay:Object.values(v.pay||{}).reduce((a,b)=>a+(+(b&&b.a)||0),0)}));
 S.clients=Object.entries(c.clients||{}).filter(e=>e[1]).map(([id,v])=>({id,name:v.name}));
 S.attendance=c.attendance||{};

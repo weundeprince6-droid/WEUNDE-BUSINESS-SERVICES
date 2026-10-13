@@ -91,25 +91,22 @@ button:disabled{opacity:.45}
 .ac-item:active{background:var(--bg)}
 #lk[hidden]{display:none}
 
-/* ===== Mise en page ordinateur (écrans larges) ===== */
+/* ===== Mise en page ordinateur (écrans larges) : menu latéral fixe + une seule page affichée ===== */
 @media (min-width:880px){
 main{max-width:1180px;padding:28px 24px}
-.brandbar{margin-bottom:18px}
+.brandbar{margin-bottom:20px}
 .brandname{font-size:1.3rem}
-.tabs{justify-content:center;gap:8px;margin-bottom:20px}
-.tabs button{flex:0 1 112px;min-width:92px;padding:12px 6px 10px;border-radius:10px}
+.appgrid{display:grid;grid-template-columns:208px 1fr;gap:28px;align-items:start}
+.tabs{flex-direction:column;flex-wrap:nowrap;gap:4px;margin-bottom:0;position:sticky;top:24px}
+.tabs button{flex:0 0 auto;flex-direction:row;justify-content:flex-start;align-items:center;gap:10px;padding:12px 14px;border-radius:8px;border:1px solid transparent;border-bottom:1px solid transparent;text-align:left;background:transparent;box-shadow:none}
+.tabs button .icon{margin:0;width:19px;height:19px}
+.tabs button[aria-selected="true"]{background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+#content{min-width:0}
 .sum{gap:12px}
 .sum div{padding:16px 8px}
 .sum b{font-size:1.3rem}
-section{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
-section>.card{margin-bottom:0}
-section>.sum,.card.wide,.card.tw{grid-column:1 / -1}
 .card{padding:18px}
 .row{gap:16px}
-}
-@media (min-width:1180px){
-section{grid-template-columns:1fr 1fr 1fr}
-section>.sum,.card.wide,.card.tw{grid-column:1 / -1}
 }
 </style>
 </head>
@@ -165,6 +162,7 @@ section>.sum,.card.wide,.card.tw{grid-column:1 / -1}
 <div><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>Caisse</small><b id="dashC">—</b></div>
 <div><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>À payer</small><b id="dashD">—</b></div>
 </div>
+<div class="appgrid">
 <div class="tabs" role="tablist">
 <button role="tab" id="tj" aria-selected="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>Jour</button>
 <button role="tab" id="tm" aria-selected="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4M8 16h8"/></svg>Mois</button>
@@ -178,6 +176,7 @@ section>.sum,.card.wide,.card.tw{grid-column:1 / -1}
 <button role="tab" id="tma" aria-selected="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94Z"/></svg>Matériel</button>
 </div>
 
+<div id="content">
 <section id="vj">
 <div class="card top wide">
 <div><label for="date">Date</label><input type="date" id="date"></div>
@@ -620,6 +619,8 @@ section>.sum,.card.wide,.card.tw{grid-column:1 / -1}
 <ul class="list" id="mahl"></ul>
 </div>
 </section>
+</div>
+</div>
 </main>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>

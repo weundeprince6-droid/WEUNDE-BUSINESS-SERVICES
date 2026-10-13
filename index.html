@@ -90,6 +90,27 @@ button:disabled{opacity:.45}
 .ac-item:first-child{border-top:0}
 .ac-item:active{background:var(--bg)}
 #lk[hidden]{display:none}
+
+/* ===== Mise en page ordinateur (écrans larges) ===== */
+@media (min-width:880px){
+main{max-width:1180px;padding:28px 24px}
+.brandbar{margin-bottom:18px}
+.brandname{font-size:1.3rem}
+.tabs{justify-content:center;gap:8px;margin-bottom:20px}
+.tabs button{flex:0 1 112px;min-width:92px;padding:12px 6px 10px;border-radius:10px}
+.sum{gap:12px}
+.sum div{padding:16px 8px}
+.sum b{font-size:1.3rem}
+section{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+section>.card{margin-bottom:0}
+section>.sum,.card.wide,.card.tw{grid-column:1 / -1}
+.card{padding:18px}
+.row{gap:16px}
+}
+@media (min-width:1180px){
+section{grid-template-columns:1fr 1fr 1fr}
+section>.sum,.card.wide,.card.tw{grid-column:1 / -1}
+}
 </style>
 </head>
 <body>
@@ -158,7 +179,7 @@ button:disabled{opacity:.45}
 </div>
 
 <section id="vj">
-<div class="card top">
+<div class="card top wide">
 <div><label for="date">Date</label><input type="date" id="date"></div>
 <div><label for="cur">Totaux en</label><select id="cur"><option value="FC">Francs</option><option value="USD">Dollars</option></select></div>
 <div><label for="rt">1 $ = … FC</label><input id="rt" type="number" inputmode="decimal" min="0"></div>
@@ -353,7 +374,7 @@ button:disabled{opacity:.45}
 <p class="empty" id="crsum" style="margin-bottom:8px"></p>
 <ul class="list" id="crl2"></ul>
 </div>
-<div class="card">
+<div class="card wide">
 <h2>Évolution de la caisse</h2>
 <div id="chart"></div>
 <div class="tw"><table><thead><tr><th>Jour</th><th>Mouvement</th><th>Caisse en fin de jour</th></tr></thead><tbody id="ct"></tbody></table></div>

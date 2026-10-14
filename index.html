@@ -601,6 +601,13 @@ label{margin:4px 0 2px;font-size:.76rem}
 <button class="go" id="cpw" style="margin-top:8px;background:var(--card);color:var(--ink);border:1px solid var(--line)">Changer le mot de passe</button>
 </div>
 <div class="card">
+<h2>Email de secours (admin)</h2>
+<p class="empty" style="margin-bottom:6px">En cas de « Mot de passe oublié », une sauvegarde des données est envoyée automatiquement à cette adresse avant l’effacement du mot de passe.</p>
+<label for="aem">Adresse email</label>
+<input id="aem" type="email" placeholder="exemple@gmail.com">
+<button class="go" id="aemSave" style="margin-top:8px">Enregistrer l’email</button>
+</div>
+<div class="card">
 <h2>Verrouillage</h2>
 <label for="lim">Verrouillage automatique après (sur cet appareil)</label>
 <select id="lim"><option value="5">5 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option><option value="60">60 minutes</option></select>
@@ -656,7 +663,15 @@ label{margin:4px 0 2px;font-size:.76rem}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.3.3/dist/email.min.js"></script>
 <script>
+// Configuration EmailJS — à remplir avec les 3 valeurs de votre compte EmailJS
+// (emailjs.com → Email Services → votre service ; Email Templates → votre
+// modèle ; Account → General → Public Key). Tant que c'est vide, l'envoi par
+// email de la sauvegarde (en cas de "mot de passe oublié") est simplement
+// ignoré — rien ne casse, l'app continue de fonctionner normalement.
+const EMAILJS_CONFIG={publicKey:"",serviceId:"",templateId:""};
+if(EMAILJS_CONFIG.publicKey&&window.emailjs)emailjs.init(EMAILJS_CONFIG.publicKey);
 // Configuration Firebase du commerce — à remplir avec les valeurs de votre
 // propre projet Firebase (Console Firebase → ⚙️ Paramètres du projet →
 // "Vos applications" → config SDK). Tant que c'est vide, l'app fonctionne
@@ -1358,9 +1373,10 @@ if(r){const p=S.stock.find(v=>v.id===r);
 const f=await askFields('Ajouter du stock',p.name,[{id:'qr_n',label:'Quantité reçue',type:'number',value:'',min:0.01}]);
 if(f)cfg({stock:{[r]:{ins:{[uid()]:{q:f.qr_n,d:today()}}}}})}
 if(pd&&await askConfirm('Retirer ce produit du stock ?')){cfg({stock:{[pd]:null}})}});
-let PW=null,PW2=null,ROLE='admin',CUR=null,_mig=false,ADMIN_USER='admin',ready=!(FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey),M='',fails=0,until=0,idle,lastM='';
+let PW=null,PW2=null,ROLE='admin',CUR=null,_mig=false,ADMIN_USER='admin',ADMIN_EMAIL='',ready=!(FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey),M='',fails=0,until=0,idle,lastM='';
 try{PW=JSON.parse(localStorage.getItem('suivi-pw'))}catch(e){}
 try{ADMIN_USER=localStorage.getItem('suivi-user')||'admin'}catch(e){}
+try{ADMIN_EMAIL=localStorage.getItem('suivi-adminEmail')||''}catch(e){}
 try{PW2=JSON.parse(localStorage.getItem('suivi-pw2'))}catch(e){}
 const enc=new TextEncoder();
 const ST=(()=>{try{localStorage.setItem('suivi-x','1');localStorage.removeItem('suivi-x');return localStorage}catch(e){try{return sessionStorage}catch(x){return{getItem(){return null},setItem(){},removeItem(){}}}}})();
@@ -1434,6 +1450,25 @@ if(usernameTaken(nu,null,true)){alert('Ce nom d’utilisateur est déjà utilis�
 ADMIN_USER=nu;
 await savePw();
 alert('Nom d’utilisateur changé.')};
+async function saveAdminEmail(v){
+ADMIN_EMAIL=v;
+if(DB)await cfg({adminEmail:v||null});
+else{try{if(v)localStorage.setItem('suivi-adminEmail',v);else localStorage.removeItem('suivi-adminEmail')}catch(e){}}}
+$('aem').value=ADMIN_EMAIL;
+$('aemSave').onclick=async()=>{
+const v=$('aem').value.trim();
+if(v&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){alert('Adresse email invalide.');return}
+await saveAdminEmail(v);
+alert(v?'Email enregistré. Une sauvegarde y sera envoyée en cas de mot de passe oublié.':'Email retiré. Aucune sauvegarde ne sera envoyée par email.')};
+function sendBackupEmail(){
+return new Promise(resolve=>{
+if(!ADMIN_EMAIL||!window.emailjs||!EMAILJS_CONFIG.serviceId||!EMAILJS_CONFIG.templateId){resolve();return}
+let data;try{data=JSON.stringify(S)}catch(e){resolve();return}
+if(data.length>30000)data=data.slice(0,30000)+'\n…(sauvegarde tronquée, trop volumineuse pour un email — pensez aussi à « Sauvegarder mes données » dans Réglages)';
+let done=false;const fin=()=>{if(!done){done=true;resolve()}};
+setTimeout(fin,6000);
+emailjs.send(EMAILJS_CONFIG.serviceId,EMAILJS_CONFIG.templateId,{to_email:ADMIN_EMAIL,message:data,date:new Date().toLocaleString('fr-FR')}).then(fin).catch(fin);
+});}
 function curEmp(){return S.emps.find(e=>e.id===CUR)||null}
 function applyRole(){
 const emp=ROLE==='employee';
@@ -1531,7 +1566,8 @@ $('lcx').onclick=()=>{M='';gate()};
 $('cpw').onclick=()=>{if(!PW){alert('Aucun mot de passe défini pour le moment.');return}M='change';gate()};
 $('lkn').onclick=()=>{M='';lockNow()};
 $('lfg').onclick=async()=>{
-if(!(await askConfirm('Supprimer le mot de passe actuel de la base (partagée sur tous les téléphones) ? Vos ventes, dépenses, stock et autres données ne sont pas touchés — vous pourrez recréer un mot de passe juste après.','Mot de passe oublié')))return;
+if(!(await askConfirm('Supprimer le mot de passe actuel de la base (partagée sur tous les téléphones) ? Vos ventes, dépenses, stock et autres données ne sont pas touchés — vous pourrez recréer un mot de passe juste après.'+(ADMIN_EMAIL?' Une sauvegarde sera envoyée par email à '+ADMIN_EMAIL+'.':''),'Mot de passe oublié')))return;
+await sendBackupEmail();
 try{localStorage.removeItem('suivi-pw');localStorage.removeItem('suivi-bio');ST.removeItem('suivi-ok');ST.removeItem('suivi-t')}catch(e){}
 if(DB){await putDoc(DB.doc('cfg/main'),{pw:null});PW=null}
 else{PW=null}
@@ -1642,7 +1678,7 @@ d.doc('cfg/main').onSnapshot(s=>{
 const c=(s.exists&&s.data())||{};
 S.cur=c.cur||'FC';S.rate=+c.rate||2800;
 S.emps=Object.entries(c.emps||{}).filter(e=>e[1]).map(([id,v])=>({id,name:v.name||'',username:v.username||'',phone:v.phone||'',secteur:v.secteur||'',note:v.note||'',s:v.s,h:v.h}));
-PW=c.pw&&c.pw.h?{s:c.pw.s,h:c.pw.h}:null;PW2=c.pw2&&c.pw2.h?{s:c.pw2.s,h:c.pw2.h}:null;ADMIN_USER=c.adminUser||'admin';ready=true;gate();S.cash.open=nopen(c.open);
+PW=c.pw&&c.pw.h?{s:c.pw.s,h:c.pw.h}:null;PW2=c.pw2&&c.pw2.h?{s:c.pw2.s,h:c.pw2.h}:null;ADMIN_USER=c.adminUser||'admin';ADMIN_EMAIL=c.adminEmail||'';if($('aem')&&document.activeElement!==$('aem'))$('aem').value=ADMIN_EMAIL;ready=true;gate();S.cash.open=nopen(c.open);
 S.stock=Object.entries(c.stock||{}).filter(e=>e[1]).map(([id,v])=>{
 const recs=Object.entries(v.ins||{}).map(([rid,e])=>({id:rid,q:+(e&&e.q!==undefined?e.q:e)||0,d:(e&&e.d)||'',mod:!!(e&&e.mod),q0:+((e&&e.q0)||0),d0:(e&&e.d0)||''}));
 return{id,name:v.name,start:+v.start||0,min:+v.min||0,buy:+v.buy||0,buyC:v.buyC||'FC',sell:+v.sell||0,sellC:v.sellC||'FC',cat:v.cat||'',mod:!!v.mod,start0:+v.start0||0,min0:+v.min0||0,recs,in:recs.reduce((s,r)=>s+r.q,0)}});

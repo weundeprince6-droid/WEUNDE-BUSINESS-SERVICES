@@ -14,7 +14,7 @@
 <link rel="icon" href="icons/icon-192.png">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#8c7449;--card:#fffdf8;--ink:#1c1409;--mut:#3f3115;--line:#6e5934;--pri:#1d3557;--onpri:#f6f1e4;--neg:#8f2c14;--gold:#5c4319;--serif:Georgia,"Noto Serif","Times New Roman",serif;--numfont:"Arial Black","Arial Bold",Gadget,sans-serif}
+--bg:#8c7449;--card:#f3e9d2;--ink:#1c1409;--mut:#3f3115;--line:#9c8252;--pri:#1d3557;--onpri:#f6f1e4;--neg:#8f2c14;--gold:#5c4319;--serif:Georgia,"Noto Serif","Times New Roman",serif;--numfont:"Arial Black","Arial Bold",Gadget,sans-serif}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1812;--card:#24211a;--ink:#f1ead9;--mut:#b6a98a;--line:#3a3526;--pri:#6f9bd1;--onpri:#0e1b2c;--neg:#ff8f6b;--gold:#d9ad5c}}
 :root[data-theme="dark"]{--bg:#1a1812;--card:#24211a;--ink:#f1ead9;--mut:#b6a98a;--line:#3a3526;--pri:#6f9bd1;--onpri:#0e1b2c;--neg:#ff8f6b;--gold:#d9ad5c}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -106,22 +106,32 @@ main{max-width:1180px;padding:28px 24px}
 .tabs button .icon{margin:0;width:19px;height:19px}
 .tabs button[aria-selected="true"]{background:var(--pri);color:var(--onpri);border-color:var(--pri);box-shadow:0 2px 6px rgba(28,20,9,.2)}
 #content{min-width:0}
-.sum{gap:12px}
-.sum div{padding:16px 8px}
-.sum b{font-size:1.3rem}
-.card{padding:22px 24px}
-.row{gap:16px}
+.sum{gap:10px}
+.sum div{padding:12px 8px}
+.sum b{font-size:1.2rem}
+h2{font-size:.92rem}
+.card{padding:14px 18px;margin-bottom:14px}
+.row{gap:14px}
 /* Formulaires : étiquette à gauche, champ à droite, au lieu d'empiler verticalement */
-#content .card:not(.top){display:grid;grid-template-columns:200px 1fr;column-gap:18px;row-gap:12px;align-items:center}
+#content .card:not(.top){display:grid;grid-template-columns:168px 1fr;column-gap:14px;row-gap:8px;align-items:center}
 #content .card:not(.top)>*{grid-column:1/-1}
-#content .card:not(.top)>label{grid-column:1;align-self:center;margin:0;padding:0}
+#content .card:not(.top)>label{grid-column:1;align-self:center;margin:0;padding:0;font-size:.8rem}
 #content .card:not(.top)>label+input,
 #content .card:not(.top)>label+select,
 #content .card:not(.top)>label+.ac-wrap{grid-column:2;align-self:center}
 #content .card:not(.top)>.full{grid-column:1/-1 !important}
-#content .card:not(.top)>h2{margin-bottom:4px}
+#content .card:not(.top)>h2{margin-bottom:2px}
 #content .card:not(.top)>.row{align-items:center}
-#content .card:not(.top)>button.go{margin-top:4px;width:auto;padding-left:28px;padding-right:28px;justify-self:start}
+#content .card:not(.top)>button.go{margin-top:2px;width:auto;padding:9px 24px;justify-self:start}
+input,select{padding:8px}
+label{margin:6px 0 2px;font-size:.8rem}
+.list li{padding:6px 0}
+/* Deux colonnes denses par page, pour limiter le défilement */
+#content section{column-count:2;column-gap:20px;column-fill:balance}
+#content section>.card{break-inside:avoid;-webkit-column-break-inside:avoid}
+#content section>.card.top,
+#content section>.sum{column-span:all}
+#content section>p.neg,#content section>button.go,#content section>#rgSum{column-span:all}
 }
 </style>
 </head>

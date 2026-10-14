@@ -101,7 +101,8 @@ main{max-width:none;width:97%;margin:0 auto;padding:18px 20px}
 .brandbar{margin-bottom:20px}
 .brandname{font-size:1.3rem}
 .appgrid{display:grid;grid-template-columns:208px 1fr;gap:28px;align-items:start}
-.tabs{flex-direction:column;flex-wrap:nowrap;gap:4px;margin-bottom:0;position:sticky;top:24px}
+#pageheader{position:sticky;top:0;z-index:6;background:var(--bg);padding-top:6px;margin-top:-6px}
+.tabs{flex-direction:column;flex-wrap:nowrap;gap:4px;margin-bottom:0;position:sticky;top:calc(var(--hdrH, 150px) + 10px)}
 .tabs button{flex:0 0 auto;flex-direction:row;justify-content:flex-start;align-items:center;gap:10px;padding:12px 14px;border-radius:8px;border:1px solid var(--line);text-align:left;background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(28,20,9,.08)}
 .tabs button .icon{margin:0;width:19px;height:19px}
 .tabs button[aria-selected="true"]{background:var(--pri);color:var(--onpri);border-color:var(--pri);box-shadow:0 2px 6px rgba(28,20,9,.2)}
@@ -177,6 +178,7 @@ label{margin:4px 0 2px;font-size:.76rem}
 </div>
 </div>
 <main>
+<div id="pageheader">
 <div class="brandbar">
 <div class="seal">WS</div>
 <div style="flex:1;min-width:0">
@@ -191,9 +193,10 @@ label{margin:4px 0 2px;font-size:.76rem}
 <p class="modepill" id="mode"><span class="dot"></span><span id="modetxt">Mode local : les données sont seulement sur cet appareil.</span></p>
 <span class="role-badge" id="rolebadge">Accès employé — saisie du jour seulement</span>
 <div class="sum" id="dash" style="margin-bottom:14px">
-<div><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Ventes du jour</small><b id="dashV">—</b></div>
-<div><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>Caisse</small><b id="dashC">—</b></div>
-<div><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>À payer</small><b id="dashD">—</b></div>
+<div id="dashVwrap"><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Ventes du jour</small><b id="dashV">—</b></div>
+<div id="dashCwrap" hidden><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>Caisse</small><b id="dashC">—</b></div>
+<div id="dashDwrap" hidden><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>À payer</small><b id="dashD">—</b></div>
+</div>
 </div>
 <div class="appgrid">
 <div class="tabs" role="tablist">
@@ -577,13 +580,13 @@ label{margin:4px 0 2px;font-size:.76rem}
 <input id="sen" placeholder="Nom">
 <button class="go" id="addSe">Ajouter le secteur</button>
 </div>
-</section>
 <div class="card" id="profcard" hidden>
 <h2>Mon profil</h2>
 <p class="empty" id="profinfo" style="margin-bottom:8px"></p>
 <button class="go" id="profedit" style="background:var(--card);color:var(--ink);border:1px solid var(--line)">Compléter / modifier mon profil</button>
 <button class="go" id="profpw" style="margin-top:8px;background:var(--card);color:var(--ink);border:1px solid var(--line)">Changer mon mot de passe</button>
 </div>
+</section>
 <section id="vsv" hidden>
 <div class="card">
 <h2>Sauvegarde</h2>
@@ -888,7 +891,10 @@ $('et').onchange=()=>{const s=$('et').value==='Salaire',st=$('et').value==='Acha
 const ml=m=>{const[y,n]=m.split('-');return new Date(+y,+n-1,1).toLocaleDateString('fr-FR',{month:'long',year:'numeric'})};
 $('cur').onchange=()=>cfg({cur:$('cur').value});
 $('date').onchange=render;$('mon').onchange=render;
-function show(t){['j','m','s','c','d','r','p','sv','se','ma'].forEach(k=>{$('v'+k).hidden=k!==t;$('t'+k).setAttribute('aria-selected',k===t)});render();layoutCols()}
+function show(t){['j','m','s','c','d','r','p','sv','se','ma'].forEach(k=>{$('v'+k).hidden=k!==t;$('t'+k).setAttribute('aria-selected',k===t)});
+$('dashVwrap').hidden=t!=='j';$('dashCwrap').hidden=t!=='c';$('dashDwrap').hidden=t!=='d';
+$('dash').hidden=!(t==='j'||t==='c'||t==='d');
+render();syncHdrH();layoutCols()}
 function layoutCols(){
 try{
 document.querySelectorAll('#content>section').forEach(sec=>{
@@ -901,10 +907,8 @@ sec.insertBefore(frag,row);row.remove()
 if(window.innerWidth<880)return;
 const nMax=window.innerWidth<1300?2:3;
 const FW=el=>el.classList&&(el.classList.contains('top')||el.classList.contains('neg')||el.id==='rgSum'||(el.tagName==='BUTTON'&&el.classList.contains('go')));
-const prof=document.getElementById('profcard');
 document.querySelectorAll('#content>section').forEach(sec=>{
 if(sec.hidden)return;
-if(prof&&!prof.hidden&&prof.parentNode!==sec)sec.appendChild(prof);
 const kids=[...sec.children];let run=[];
 const flush=before=>{
 if(run.length<2){run=[];return}
@@ -925,7 +929,8 @@ flush(null)
 })
 }catch(e){}
 }
-let _lcT;window.addEventListener('resize',()=>{clearTimeout(_lcT);_lcT=setTimeout(layoutCols,200)});
+function syncHdrH(){try{const h=$('pageheader');if(h)document.documentElement.style.setProperty('--hdrH',h.offsetHeight+'px')}catch(e){}}
+let _lcT;window.addEventListener('resize',()=>{clearTimeout(_lcT);_lcT=setTimeout(()=>{syncHdrH();layoutCols()},200)});
 $('tj').onclick=()=>show('j');$('tm').onclick=()=>show('m');$('ts').onclick=()=>show('s');$('tc').onclick=()=>show('c');$('td').onclick=()=>show('d');$('tr').onclick=()=>show('r');$('tp').onclick=()=>show('p');$('tsv').onclick=()=>show('sv');$('tse').onclick=()=>show('se');$('tma').onclick=()=>show('ma');
 const key=s=>s.trim().toLowerCase();
 const level=p=>p.start+p.in-S.sales.filter(x=>key(x.name)===key(p.name)).reduce((s,x)=>s+x.q,0)-S.credits.filter(x=>x.pname&&key(x.pname)===key(p.name)).reduce((s,x)=>s+(x.qty||0),0);
@@ -1745,8 +1750,8 @@ S.cash=S.cash||{open:{FC:0,USD:0},moves:[]};S.cash.moves=S.cash.moves||[];S.stoc
 save();$('cur').value=S.cur;$('rt').value=S.rate;$('co').value=S.cash.open.FC||'';$('cu').value=S.cash.open.USD||'';render();alert('Sauvegarde restaurée.')
 }catch(x){alert('Fichier invalide.')}};
 rd.readAsText(f);e.target.value=''};
-render();gate();bump();layoutCols();
-setTimeout(layoutCols,900);setTimeout(layoutCols,2500);
+render();gate();bump();syncHdrH();layoutCols();
+setTimeout(()=>{syncHdrH();layoutCols()},900);setTimeout(()=>{syncHdrH();layoutCols()},2500);
 function tickClock(){
 const n=new Date();
 const d=n.toLocaleDateString('fr-FR',{weekday:'long',day:'2-digit',month:'long'});

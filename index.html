@@ -128,20 +128,15 @@ input,select{padding:6px 8px;font-size:.92rem}
 label{margin:4px 0 2px;font-size:.76rem}
 .list li{padding:5px 0;font-size:.92rem}
 .empty{font-size:.82rem}
-/* Colonnes denses par page, pour exploiter l'espace et limiter le défilement */
-#content section{column-count:2;column-gap:16px;column-fill:balance}
-#content section>.card{break-inside:avoid;-webkit-column-break-inside:avoid}
-#content section>.card.top{column-span:all}
-#content section>p.neg,#content section>button.go,#content section>#rgSum{column-span:all}
-#content section>.sum{break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:10px}
-#content section>.sum div{padding:9px 5px}
-#content section>.sum b{font-size:.98rem}
+/* Colonnes denses par page : réparties et équilibrées par le script (voir layoutCols) */
+.mrow{display:flex;align-items:flex-start;gap:16px;margin-bottom:10px}
+.mrow .mcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.mrow .mcol>*{margin-bottom:0}
+#content section .sum div{padding:9px 5px}
+#content section .sum b{font-size:.98rem}
 #content .card,#content .card *{line-height:1.3}
 #content .card p{margin:0 0 6px}
 #content .list li{line-height:1.25}
-}
-@media (min-width:1300px){
-#content section{column-count:3}
 }
 </style>
 </head>
@@ -893,7 +888,41 @@ $('et').onchange=()=>{const s=$('et').value==='Salaire',st=$('et').value==='Acha
 const ml=m=>{const[y,n]=m.split('-');return new Date(+y,+n-1,1).toLocaleDateString('fr-FR',{month:'long',year:'numeric'})};
 $('cur').onchange=()=>cfg({cur:$('cur').value});
 $('date').onchange=render;$('mon').onchange=render;
-function show(t){['j','m','s','c','d','r','p','sv','se','ma'].forEach(k=>{$('v'+k).hidden=k!==t;$('t'+k).setAttribute('aria-selected',k===t)});render()}
+function show(t){['j','m','s','c','d','r','p','sv','se','ma'].forEach(k=>{$('v'+k).hidden=k!==t;$('t'+k).setAttribute('aria-selected',k===t)});render();layoutCols()}
+function layoutCols(){
+try{
+document.querySelectorAll('#content>section').forEach(sec=>{
+[...sec.children].filter(c=>c.classList&&c.classList.contains('mrow')).forEach(row=>{
+const frag=document.createDocumentFragment();
+[...row.querySelectorAll('.mcol')].forEach(c=>{while(c.firstChild)frag.appendChild(c.firstChild)});
+sec.insertBefore(frag,row);row.remove()
+})
+});
+if(window.innerWidth<880)return;
+const n=window.innerWidth<1300?2:3;
+const FW=el=>el.classList&&(el.classList.contains('top')||el.classList.contains('neg')||el.id==='rgSum'||(el.tagName==='BUTTON'&&el.classList.contains('go')));
+document.querySelectorAll('#content>section').forEach(sec=>{
+if(sec.hidden)return;
+const kids=[...sec.children];let run=[];
+const flush=before=>{
+if(run.length<2){run=[];return}
+const row=document.createElement('div');row.className='mrow';
+sec.insertBefore(row,before||null);
+const cols=[],heights=[];
+for(let i=0;i<n;i++){const c=document.createElement('div');c.className='mcol';row.appendChild(c);cols.push(c);heights.push(0)}
+run.forEach(el=>{
+let mi=0;for(let i=1;i<n;i++)if(heights[i]<heights[mi])mi=i;
+cols[mi].appendChild(el);
+heights[mi]+=(el.getBoundingClientRect().height||80)+10
+});
+run=[]
+};
+kids.forEach(el=>{if(el.nodeType!==1)return;if(FW(el))flush(el);else run.push(el)});
+flush(null)
+})
+}catch(e){}
+}
+let _lcT;window.addEventListener('resize',()=>{clearTimeout(_lcT);_lcT=setTimeout(layoutCols,200)});
 $('tj').onclick=()=>show('j');$('tm').onclick=()=>show('m');$('ts').onclick=()=>show('s');$('tc').onclick=()=>show('c');$('td').onclick=()=>show('d');$('tr').onclick=()=>show('r');$('tp').onclick=()=>show('p');$('tsv').onclick=()=>show('sv');$('tse').onclick=()=>show('se');$('tma').onclick=()=>show('ma');
 const key=s=>s.trim().toLowerCase();
 const level=p=>p.start+p.in-S.sales.filter(x=>key(x.name)===key(p.name)).reduce((s,x)=>s+x.q,0)-S.credits.filter(x=>x.pname&&key(x.pname)===key(p.name)).reduce((s,x)=>s+(x.qty||0),0);
@@ -1713,7 +1742,8 @@ S.cash=S.cash||{open:{FC:0,USD:0},moves:[]};S.cash.moves=S.cash.moves||[];S.stoc
 save();$('cur').value=S.cur;$('rt').value=S.rate;$('co').value=S.cash.open.FC||'';$('cu').value=S.cash.open.USD||'';render();alert('Sauvegarde restaurée.')
 }catch(x){alert('Fichier invalide.')}};
 rd.readAsText(f);e.target.value=''};
-render();gate();bump();
+render();gate();bump();layoutCols();
+setTimeout(layoutCols,900);setTimeout(layoutCols,2500);
 function tickClock(){
 const n=new Date();
 const d=n.toLocaleDateString('fr-FR',{weekday:'long',day:'2-digit',month:'long'});

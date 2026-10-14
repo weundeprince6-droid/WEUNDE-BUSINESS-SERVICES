@@ -899,13 +899,16 @@ sec.insertBefore(frag,row);row.remove()
 })
 });
 if(window.innerWidth<880)return;
-const n=window.innerWidth<1300?2:3;
+const nMax=window.innerWidth<1300?2:3;
 const FW=el=>el.classList&&(el.classList.contains('top')||el.classList.contains('neg')||el.id==='rgSum'||(el.tagName==='BUTTON'&&el.classList.contains('go')));
+const prof=document.getElementById('profcard');
 document.querySelectorAll('#content>section').forEach(sec=>{
 if(sec.hidden)return;
+if(prof&&!prof.hidden&&prof.parentNode!==sec)sec.appendChild(prof);
 const kids=[...sec.children];let run=[];
 const flush=before=>{
 if(run.length<2){run=[];return}
+const n=Math.max(1,Math.min(nMax,Math.ceil(run.length/2)));
 const row=document.createElement('div');row.className='mrow';
 sec.insertBefore(row,before||null);
 const cols=[],heights=[];

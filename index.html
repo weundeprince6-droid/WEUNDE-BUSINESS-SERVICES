@@ -97,7 +97,7 @@ button:disabled{opacity:.45}
 
 /* ===== Mise en page ordinateur (écrans larges) : menu latéral fixe + une seule page affichée ===== */
 @media (min-width:880px){
-main{max-width:1180px;padding:28px 24px}
+main{max-width:none;width:97%;margin:0 auto;padding:18px 20px}
 .brandbar{margin-bottom:20px}
 .brandname{font-size:1.3rem}
 .appgrid{display:grid;grid-template-columns:208px 1fr;gap:28px;align-items:start}
@@ -106,32 +106,37 @@ main{max-width:1180px;padding:28px 24px}
 .tabs button .icon{margin:0;width:19px;height:19px}
 .tabs button[aria-selected="true"]{background:var(--pri);color:var(--onpri);border-color:var(--pri);box-shadow:0 2px 6px rgba(28,20,9,.2)}
 #content{min-width:0}
-.sum{gap:10px}
-.sum div{padding:12px 8px}
-.sum b{font-size:1.2rem}
-h2{font-size:.92rem}
-.card{padding:14px 18px;margin-bottom:14px}
-.row{gap:14px}
+.sum{gap:8px}
+.sum div{padding:8px 6px}
+.sum small{font-size:.68rem}
+.sum b{font-size:1.05rem}
+h2{font-size:.88rem;margin-bottom:6px}
+.card{padding:10px 14px;margin-bottom:10px}
+.row{gap:10px}
 /* Formulaires : étiquette à gauche, champ à droite, au lieu d'empiler verticalement */
-#content .card:not(.top){display:grid;grid-template-columns:168px 1fr;column-gap:14px;row-gap:8px;align-items:center}
+#content .card:not(.top){display:grid;grid-template-columns:140px 1fr;column-gap:10px;row-gap:5px;align-items:center}
 #content .card:not(.top)>*{grid-column:1/-1}
-#content .card:not(.top)>label{grid-column:1;align-self:center;margin:0;padding:0;font-size:.8rem}
+#content .card:not(.top)>label{grid-column:1;align-self:center;margin:0;padding:0;font-size:.76rem}
 #content .card:not(.top)>label+input,
 #content .card:not(.top)>label+select,
 #content .card:not(.top)>label+.ac-wrap{grid-column:2;align-self:center}
 #content .card:not(.top)>.full{grid-column:1/-1 !important}
-#content .card:not(.top)>h2{margin-bottom:2px}
+#content .card:not(.top)>h2{margin-bottom:1px}
 #content .card:not(.top)>.row{align-items:center}
-#content .card:not(.top)>button.go{margin-top:2px;width:auto;padding:9px 24px;justify-self:start}
-input,select{padding:8px}
-label{margin:6px 0 2px;font-size:.8rem}
-.list li{padding:6px 0}
-/* Deux colonnes denses par page, pour limiter le défilement */
-#content section{column-count:2;column-gap:20px;column-fill:balance}
+#content .card:not(.top)>button.go{margin-top:1px;width:auto;padding:7px 20px;font-size:.88rem;justify-self:start}
+input,select{padding:6px 8px;font-size:.92rem}
+label{margin:4px 0 2px;font-size:.76rem}
+.list li{padding:5px 0;font-size:.92rem}
+.empty{font-size:.82rem}
+/* Colonnes denses par page, pour exploiter l'espace et limiter le défilement */
+#content section{column-count:2;column-gap:16px;column-fill:balance}
 #content section>.card{break-inside:avoid;-webkit-column-break-inside:avoid}
 #content section>.card.top,
 #content section>.sum{column-span:all}
 #content section>p.neg,#content section>button.go,#content section>#rgSum{column-span:all}
+}
+@media (min-width:1300px){
+#content section{column-count:3}
 }
 </style>
 </head>

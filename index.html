@@ -131,9 +131,14 @@ label{margin:4px 0 2px;font-size:.76rem}
 /* Colonnes denses par page, pour exploiter l'espace et limiter le défilement */
 #content section{column-count:2;column-gap:16px;column-fill:balance}
 #content section>.card{break-inside:avoid;-webkit-column-break-inside:avoid}
-#content section>.card.top,
-#content section>.sum{column-span:all}
+#content section>.card.top{column-span:all}
 #content section>p.neg,#content section>button.go,#content section>#rgSum{column-span:all}
+#content section>.sum{break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:10px}
+#content section>.sum div{padding:9px 5px}
+#content section>.sum b{font-size:.98rem}
+#content .card,#content .card *{line-height:1.3}
+#content .card p{margin:0 0 6px}
+#content .list li{line-height:1.25}
 }
 @media (min-width:1300px){
 #content section{column-count:3}

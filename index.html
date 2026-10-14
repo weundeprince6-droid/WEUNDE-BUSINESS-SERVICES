@@ -27,7 +27,7 @@ h2{font-size:1rem;margin:0 0 10px}
 .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
 .tabs button{flex:1 1 calc(20% - 6px);min-width:64px;padding:9px 4px 7px;border:1px solid var(--line);border-bottom:3px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;font:inherit;font-weight:600}
 .tabs button[aria-selected="true"]{background:var(--card);color:var(--pri);border-color:var(--line);border-bottom-color:var(--pri)}
-.brandbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:2px 0 8px}
+.brandbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:2px 0 6px}
 .brandbar .rightwrap{display:flex;align-items:center;gap:10px;margin-left:auto}
 .seal{flex:0 0 auto;width:40px;height:40px;border-radius:50%;background:var(--pri);color:var(--onpri);display:flex;align-items:center;justify-content:center;font:700 .95rem/1 var(--serif);letter-spacing:.5px;box-shadow:inset 0 0 0 2px rgba(244,241,230,.35)}
 .seal.lg{width:56px;height:56px;font-size:1.25rem}
@@ -85,7 +85,7 @@ button:disabled{opacity:.45}
 .role-employee [data-s],.role-employee [data-e],.role-employee [data-c],.role-employee [data-mp],.role-employee [data-me],.role-employee [data-mc]{display:none}
 .role-employee #sum{display:none}
 .role-employee #dash{display:none}
-.role-badge{display:none;background:var(--pri);color:var(--onpri);font-size:.75rem;font-weight:700;padding:3px 8px;border-radius:6px;margin:0 0 6px}
+.role-badge{display:none;background:var(--pri);color:var(--onpri);font-size:.75rem;font-weight:700;padding:3px 8px;border-radius:6px;margin:0}
 .role-employee .role-badge{display:inline-block}
 .ac-wrap{position:relative}
 .ac-list{position:absolute;left:0;right:0;top:100%;z-index:15;background:var(--card);border:1px solid var(--line);border-radius:8px;max-height:170px;overflow-y:auto;margin-top:2px;box-shadow:0 6px 16px rgba(0,0,0,.35)}
@@ -98,7 +98,7 @@ button:disabled{opacity:.45}
 /* ===== Mise en page ordinateur (écrans larges) : menu latéral fixe + une seule page affichée ===== */
 @media (min-width:880px){
 main{max-width:none;width:97%;margin:0 auto;padding:18px 20px}
-.brandbar{margin-bottom:10px}
+.brandbar{margin-bottom:8px}
 .brandname{font-size:1.3rem}
 .appgrid{display:grid;grid-template-columns:208px 1fr;gap:28px;align-items:start}
 #pageheader{position:sticky;top:0;z-index:6;background:var(--bg);padding-top:6px;margin-top:-6px}
@@ -192,11 +192,6 @@ label{margin:4px 0 2px;font-size:.76rem}
 </div>
 </div>
 <span class="role-badge" id="rolebadge">Accès employé — saisie du jour seulement</span>
-<div class="sum" id="dash" style="margin-bottom:8px">
-<div id="dashVwrap"><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Ventes du jour</small><b id="dashV">—</b></div>
-<div id="dashCwrap" hidden><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>Caisse</small><b id="dashC">—</b></div>
-<div id="dashDwrap" hidden><small><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>À payer</small><b id="dashD">—</b></div>
-</div>
 </div>
 <div class="appgrid">
 <div class="tabs" role="tablist">
@@ -775,16 +770,6 @@ $('mfore').textContent=dnum>0?'Projection de fin de mois (recettes), au rythme a
 }else $('mfore').textContent='';
 const safe=(name,fn)=>{try{fn()}catch(e){console&&console.error&&console.error('Erreur render '+name,e)}};
 safe('stock',renderStock);safe('cash',renderCash);safe('debts',renderDebts);safe('lists',renderLists);safe('credits',renderCredits);safe('ristourne',renderRistourne);safe('equip',renderEquip);safe('presence',renderPresence);
-safe('dash',()=>{
-const vToday=tot(S.sales.filter(x=>x.d===today()));
-$('dashV').textContent=fmt(vToday);
-let b=cv(S.cash.open.FC,'FC')+cv(S.cash.open.USD,'USD');
-S.sales.forEach(x=>b+=cv(x.q*x.p,x.c));S.exp.forEach(x=>b-=cv(x.a,x.c));S.cash.moves.forEach(x=>b+=mv(x));
-$('dashC').textContent=fmt(b);$('dashC').className=b<0?'neg':'';
-const opD=S.debts.filter(x=>rest(x)>0),smD=k=>opD.filter(x=>x.k===k).reduce((s,x)=>s+cv(rest(x),x.c),0);
-const toPay=smD('d')+smD('a')+smD('l');
-$('dashD').textContent=fmt(toPay);$('dashD').className=toPay>0?'neg':'';
-});
 }
 
 $('addS').onclick=async()=>{
@@ -892,8 +877,6 @@ const ml=m=>{const[y,n]=m.split('-');return new Date(+y,+n-1,1).toLocaleDateStri
 $('cur').onchange=()=>cfg({cur:$('cur').value});
 $('date').onchange=render;$('mon').onchange=render;
 function show(t){['j','m','s','c','d','r','p','sv','se','ma'].forEach(k=>{$('v'+k).hidden=k!==t;$('t'+k).setAttribute('aria-selected',k===t)});
-$('dashVwrap').hidden=t!=='j';$('dashCwrap').hidden=t!=='c';$('dashDwrap').hidden=t!=='d';
-$('dash').hidden=!(t==='j'||t==='c'||t==='d');
 render();syncHdrH();layoutCols()}
 function layoutCols(){
 try{

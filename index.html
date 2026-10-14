@@ -52,7 +52,9 @@ h2{font-size:1rem;margin:0 0 10px}
 .pwcaret.on{opacity:1;animation:pwblink 1s steps(1) infinite}
 @keyframes pwblink{50%{opacity:0}}
 label{display:block;font-size:.85rem;color:var(--mut);margin:8px 0 3px}
-input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;font-weight:400;font-style:normal;text-transform:none}
+select,option{font:inherit;font-weight:400}
+input::placeholder,textarea::placeholder{font-style:normal;font-weight:400;opacity:.6;color:var(--mut)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 button.go{width:100%;margin-top:12px;padding:12px;border:0;border-radius:8px;background:var(--pri);color:var(--onpri);font:inherit;font-weight:700}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--pri);outline-offset:1px}

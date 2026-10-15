@@ -224,23 +224,6 @@ label{margin:4px 0 2px;font-size:.76rem}
 <div class="sum" id="sum"></div>
 
 <div class="card" style="margin-top:14px">
-<h2>Ajouter une vente</h2>
-<label for="sc">Secteur</label>
-<select id="sc"></select>
-<label for="sn">Article ou service</label>
-<div class="ac-wrap"><input id="sn" placeholder="Ex. Cahier 96 pages" autocomplete="off"><div class="ac-list" id="sn_ac" hidden></div></div>
-<button type="button" class="go" id="snNew" style="margin-top:6px;background:var(--card);color:var(--ink);border:1px solid var(--line);font-size:.9rem;padding:8px">+ Nouveau produit</button>
-<p id="sh" class="empty" style="margin:4px 0 0"></p>
-<div class="row">
-<div><label for="sq">Quantité</label><input id="sq" type="number" inputmode="decimal" min="0" value="1"></div>
-<div><label for="sp">Prix unitaire</label><input id="sp" type="number" inputmode="decimal" min="0"></div>
-</div>
-<label for="scc">Devise</label>
-<select id="scc"><option value="FC">Francs (FC)</option><option value="USD">Dollars ($)</option></select>
-<button class="go" id="addS">Enregistrer la vente</button>
-</div>
-
-<div class="card">
 <h2>Ajouter une dépense</h2>
 <label for="et">Type</label>
 <select id="et"><option>Achat de stock</option><option>Salaire</option><option>Loyer du local</option><option>Électricité</option><option>Internet</option><option>Autre</option></select>
@@ -262,13 +245,30 @@ label{margin:4px 0 2px;font-size:.76rem}
 </div>
 
 <div class="card">
-<h2>Ventes du jour</h2>
-<ul class="list" id="ls"></ul>
+<h2>Ajouter une vente</h2>
+<label for="sc">Secteur</label>
+<select id="sc"></select>
+<label for="sn">Article ou service</label>
+<div class="ac-wrap"><input id="sn" placeholder="Ex. Cahier 96 pages" autocomplete="off"><div class="ac-list" id="sn_ac" hidden></div></div>
+<button type="button" class="go" id="snNew" style="margin-top:6px;background:var(--card);color:var(--ink);border:1px solid var(--line);font-size:.9rem;padding:8px">+ Nouveau produit</button>
+<p id="sh" class="empty" style="margin:4px 0 0"></p>
+<div class="row">
+<div><label for="sq">Quantité</label><input id="sq" type="number" inputmode="decimal" min="0" value="1"></div>
+<div><label for="sp">Prix unitaire</label><input id="sp" type="number" inputmode="decimal" min="0"></div>
+</div>
+<label for="scc">Devise</label>
+<select id="scc"><option value="FC">Francs (FC)</option><option value="USD">Dollars ($)</option></select>
+<button class="go" id="addS">Enregistrer la vente</button>
 </div>
 
 <div class="card">
 <h2>Dépenses du jour</h2>
 <ul class="list" id="le"></ul>
+</div>
+
+<div class="card">
+<h2>Ventes du jour</h2>
+<ul class="list" id="ls"></ul>
 </div>
 </section>
 

@@ -1574,7 +1574,8 @@ $('lcx').onclick=()=>{M='';gate()};
 $('cpw').onclick=()=>{if(!PW){alert('Aucun mot de passe défini pour le moment.');return}M='change';gate()};
 $('lkn').onclick=()=>{M='';lockNow()};
 $('lfg').onclick=async()=>{
-if(!(await askConfirm('Supprimer le mot de passe actuel de la base (partagée sur tous les téléphones) ? Vos ventes, dépenses, stock et autres données ne sont pas touchés — vous pourrez recréer un mot de passe juste après.'+(ADMIN_EMAIL?' Une sauvegarde sera envoyée par email à '+ADMIN_EMAIL+'.':''),'Mot de passe oublié')))return;
+if(!(await askConfirm('Supprimer le mot de passe actuel de la base (partagée sur tous les téléphones) ? Vos ventes, dépenses, stock et autres données ne sont pas touchés — vous pourrez recréer un mot de passe juste après. Une sauvegarde va être téléchargée sur cet appareil'+(ADMIN_EMAIL?', et aussi envoyée par email à '+ADMIN_EMAIL:'')+'.','Mot de passe oublié')))return;
+await doBackup();
 await sendBackupEmail();
 try{localStorage.removeItem('suivi-pw');localStorage.removeItem('suivi-bio');ST.removeItem('suivi-ok');ST.removeItem('suivi-t')}catch(e){}
 if(DB){await putDoc(DB.doc('cfg/main'),{pw:null});PW=null}

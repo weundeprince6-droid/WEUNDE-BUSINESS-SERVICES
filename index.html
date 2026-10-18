@@ -14,9 +14,9 @@
 <link rel="icon" href="icons/icon-192.png">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#c3d7ee;--card:#fcfdff;--ink:#14263e;--mut:#3d5873;--line:#aec4dc;--pri:#1d4e89;--onpri:#ffffff;--onpri-mut:rgba(255,255,255,.78);--neg:#b3261e;--gold:#1d4e89;--serif:Georgia,"Noto Serif","Times New Roman",serif;--numfont:"Arial Black","Arial Bold",Gadget,sans-serif}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1726;--card:#132a44;--ink:#eaf2fb;--mut:#9fb4cc;--line:#254568;--pri:#5b9bd9;--onpri:#06111d;--onpri-mut:rgba(6,17,29,.68);--neg:#ff9382;--gold:#5b9bd9}}
-:root[data-theme="dark"]{--bg:#0b1726;--card:#132a44;--ink:#eaf2fb;--mut:#9fb4cc;--line:#254568;--pri:#5b9bd9;--onpri:#06111d;--onpri-mut:rgba(6,17,29,.68);--neg:#ff9382;--gold:#5b9bd9}
+--bg:#c3d7ee;--card:#fcfdff;--ink:#14263e;--mut:#3d5873;--line:#aec4dc;--pri:#1d4e89;--onpri:#ffffff;--onpri-mut:rgba(255,255,255,.78);--neg:#b3261e;--gold:#1d4e89;--amber:#c7821a;--grn:#1f7a4d;--serif:Georgia,"Noto Serif","Times New Roman",serif;--numfont:"Arial Black","Arial Bold",Gadget,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1726;--card:#132a44;--ink:#eaf2fb;--mut:#9fb4cc;--line:#254568;--pri:#5b9bd9;--onpri:#06111d;--onpri-mut:rgba(6,17,29,.68);--neg:#ff9382;--gold:#5b9bd9;--amber:#e0ab4f;--grn:#4fb583}}
+:root[data-theme="dark"]{--bg:#0b1726;--card:#132a44;--ink:#eaf2fb;--mut:#9fb4cc;--line:#254568;--pri:#5b9bd9;--onpri:#06111d;--onpri-mut:rgba(6,17,29,.68);--neg:#ff9382;--gold:#5b9bd9;--amber:#e0ab4f;--grn:#4fb583}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -33,7 +33,7 @@ h2{font-size:1rem;margin:0 0 10px}
 .seal.lg{width:56px;height:56px;font-size:1.25rem}
 .brandname{font:700 1.15rem/1.15 var(--serif);color:var(--ink);margin:0}
 .brandtag{font-size:.78rem;color:var(--mut);margin:2px 0 0}
-#pageheader{background:var(--pri);border-radius:14px;padding:14px 16px;margin:0 0 14px;box-shadow:0 4px 14px rgba(20,38,62,.25)}
+#pageheader{background:var(--pri);border-radius:14px;padding:14px 16px;margin:12px 16px 14px;box-shadow:0 4px 14px rgba(20,38,62,.25)}
 #pageheader .seal{background:var(--onpri);color:var(--pri);box-shadow:inset 0 0 0 2px rgba(29,78,137,.18)}
 #pageheader .brandname{color:var(--onpri)}
 #pageheader .brandtag{color:var(--onpri-mut)}
@@ -63,7 +63,12 @@ input::placeholder,textarea::placeholder{font-style:normal;font-weight:400;opaci
 button.go{width:100%;margin-top:12px;padding:12px;border:0;border-radius:8px;background:var(--pri);color:var(--onpri);font:inherit;font-weight:700}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--pri);outline-offset:1px}
 .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
-.sum div{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--pri);border-radius:8px;padding:10px 4px;box-shadow:0 2px 6px rgba(20,38,62,.12)}
+.sum div{position:relative;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--pri);border-radius:8px;padding:10px 4px 10px 10px;box-shadow:0 2px 6px rgba(20,38,62,.12)}
+.sum div::before{content:'';position:absolute;top:8px;left:8px;width:8px;height:8px;border-radius:50%;background:var(--pri)}
+.sum div:nth-child(3n+2){border-top-color:var(--amber)}
+.sum div:nth-child(3n+2)::before{background:var(--amber)}
+.sum div:nth-child(3n+3){border-top-color:var(--grn)}
+.sum div:nth-child(3n+3)::before{background:var(--grn)}
 .sum small{display:block;color:var(--mut);font-size:.75rem}
 .sum b{font:900 1.15rem/1.2 var(--numfont)}
 .neg{color:var(--neg)}
@@ -101,20 +106,21 @@ button:disabled{opacity:.45}
 .ac-item:active{background:var(--bg)}
 #lk[hidden]{display:none}
 
-/* ===== Mise en page ordinateur (écrans larges) : menu latéral fixe + une seule page affichée ===== */
+/* ===== Mise en page ordinateur (écrans larges) : entête pleine largeur + onglets horizontaux ===== */
 @media (min-width:880px){
-main{max-width:none;width:97%;margin:0 auto;padding:18px 20px}
+main{max-width:none;width:97%;margin:0 auto;padding:4px 20px 20px}
 .brandbar{margin-bottom:8px}
 .brandname{font-size:1.3rem}
-.appgrid{display:grid;grid-template-columns:208px 1fr;gap:28px;align-items:start}
-#pageheader{position:sticky;top:0;z-index:6}
-.tabs{flex-direction:column;flex-wrap:nowrap;gap:4px;margin-bottom:0;position:sticky;top:calc(var(--hdrH, 150px) + 10px)}
-.tabs button{flex:0 0 auto;flex-direction:row;justify-content:flex-start;align-items:center;gap:10px;padding:12px 14px;border-radius:8px;border:1px solid var(--line);text-align:left;background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(20,38,62,.08)}
-.tabs button .icon{margin:0;width:19px;height:19px}
-.tabs button[aria-selected="true"]{background:var(--pri);color:var(--onpri);border-color:var(--pri);box-shadow:0 2px 6px rgba(20,38,62,.2)}
+.appgrid{display:block}
+#pageheader{position:sticky;top:0;z-index:6;border-radius:0;margin:0;padding:14px 28px}
+.tabs{flex-direction:row;flex-wrap:wrap;gap:2px;margin:0 0 18px;position:sticky;top:var(--hdrH,64px);z-index:5;background:var(--bg);padding:8px 0 0;border-bottom:1px solid var(--line)}
+.tabs button{flex:0 0 auto;flex-direction:row;align-items:center;gap:8px;padding:10px 16px;border:0;border-bottom:3px solid transparent;border-radius:6px 6px 0 0;text-align:left;background:transparent;color:var(--mut);box-shadow:none;font-weight:600}
+.tabs button .icon{margin:0;width:18px;height:18px}
+.tabs button:hover{background:var(--card)}
+.tabs button[aria-selected="true"]{background:transparent;color:var(--pri);border-color:transparent;border-bottom-color:var(--pri);box-shadow:none}
 #content{min-width:0}
 .sum{gap:8px}
-.sum div{padding:8px 6px}
+.sum div{padding:8px 6px 8px 12px}
 .sum small{font-size:.68rem}
 .sum b{font-size:1.05rem}
 h2{font-size:.88rem;margin-bottom:6px}
@@ -139,7 +145,7 @@ label{margin:4px 0 2px;font-size:.76rem}
 .mrow{display:flex;align-items:flex-start;gap:16px;margin-bottom:10px}
 .mrow .mcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
 .mrow .mcol>*{margin-bottom:0}
-#content section .sum div{padding:9px 5px}
+#content section .sum div{padding:9px 5px 9px 11px}
 #content section .sum b{font-size:.98rem}
 #content .card,#content .card *{line-height:1.3}
 #content .card p{margin:0 0 6px}
@@ -183,7 +189,6 @@ label{margin:4px 0 2px;font-size:.76rem}
 </div>
 </div>
 </div>
-<main>
 <div id="pageheader">
 <div class="brandbar">
 <div class="seal">WS</div>
@@ -199,6 +204,7 @@ label{margin:4px 0 2px;font-size:.76rem}
 </div>
 <span class="role-badge" id="rolebadge">Accès employé — saisie du jour seulement</span>
 </div>
+<main>
 <div class="appgrid">
 <div class="tabs" role="tablist">
 <button role="tab" id="tj" aria-selected="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>Jour</button>

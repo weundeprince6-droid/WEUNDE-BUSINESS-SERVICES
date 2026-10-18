@@ -616,7 +616,7 @@ label{margin:4px 0 2px;font-size:.76rem}
 </div>
 <div class="card">
 <h2>Email de secours (admin)</h2>
-<p class="empty" style="margin-bottom:6px">En cas de « Mot de passe oublié », une sauvegarde des données est envoyée automatiquement à cette adresse avant l’effacement du mot de passe.</p>
+<p class="empty" style="margin-bottom:6px">En cas de « Mot de passe oublié » (en mode partagé), un lien est envoyé automatiquement à cette adresse pour choisir un nouveau mot de passe, sans toucher aux données. Sans connexion Internet ou sans email enregistré, une sauvegarde est téléchargée sur l’appareil à la place.</p>
 <label for="aem">Adresse email</label>
 <input id="aem" type="email" placeholder="exemple@gmail.com">
 <button class="go" id="aemSave" style="margin-top:8px">Enregistrer l’email</button>
@@ -1387,7 +1387,7 @@ if(r){const p=S.stock.find(v=>v.id===r);
 const f=await askFields('Ajouter du stock',p.name,[{id:'qr_n',label:'Quantité reçue',type:'number',value:'',min:0.01}]);
 if(f)cfg({stock:{[r]:{ins:{[uid()]:{q:f.qr_n,d:today()}}}}})}
 if(pd&&await askConfirm('Retirer ce produit du stock ?')){cfg({stock:{[pd]:null}})}});
-let PW=null,PW2=null,ROLE='admin',CUR=null,_mig=false,ADMIN_USER='admin',ADMIN_EMAIL='',ready=!(FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey),M='',fails=0,until=0,idle,lastM='';
+let PW=null,PW2=null,ROLE='admin',CUR=null,_mig=false,ADMIN_USER='admin',ADMIN_EMAIL='',ready=!(FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey),M='',fails=0,until=0,idle,lastM='',RESETLINK=false;
 try{PW=JSON.parse(localStorage.getItem('suivi-pw'))}catch(e){}
 try{ADMIN_USER=localStorage.getItem('suivi-user')||'admin'}catch(e){}
 try{ADMIN_EMAIL=localStorage.getItem('suivi-adminEmail')||''}catch(e){}
@@ -1420,14 +1420,14 @@ sess();gate()
 }catch(e){msg('Empreinte impossible : '+bioErr(e)+'. Utilisez le mot de passe.')}}
 const msg=t=>{$('lkm').textContent=t};
 function gate(){
-if(M!=='change'&&M!=='reset')M=!ready?'load':!PW?'setup':okS()?'':'login';
+if(M!=='change'&&M!=='reset'&&M!=='pwreset')M=!ready?'load':RESETLINK?'pwreset':!PW?'setup':okS()?'':'login';
 $('lk').hidden=M==='';
 if(M===''){lastM='';applyRole();return}
-$('lkt').textContent={load:'Chargement…',setup:'Créez un mot de passe',login:'Mot de passe',change:'Changer le mot de passe',reset:'Remise à zéro complète'}[M];
-if(lastM!==M){msg({load:'',setup:'Il protège l’accès à ces données. Notez-le bien : il ne peut pas être récupéré.',login:'Entrez le mot de passe pour ouvrir le suivi.',change:'',reset:'Efface les ventes, dépenses, la caisse principale, les dettes et les créances de tous les jours. Le stock, les listes et le mot de passe restent. Entrez le mot de passe pour confirmer.'}[M]);
+$('lkt').textContent={load:'Chargement…',setup:'Créez un mot de passe',login:'Mot de passe',change:'Changer le mot de passe',reset:'Remise à zéro complète',pwreset:'Nouveau mot de passe'}[M];
+if(lastM!==M){msg({load:'',setup:'Il protège l’accès à ces données. Notez-le bien : il ne peut pas être récupéré.',login:'Entrez le mot de passe pour ouvrir le suivi.',change:'',reset:'Efface les ventes, dépenses, la caisse principale, les dettes et les créances de tous les jours. Le stock, les listes et le mot de passe restent. Entrez le mot de passe pour confirmer.',pwreset:'Lien vérifié par email. Choisissez un nouveau mot de passe pour continuer.'}[M]);
 ['lp0','lp1','lp2'].forEach(i=>{$(i).value='';pwSync(i)});$('lku').value='';if(M!=='load')setTimeout(()=>$(M==='change'?'lp0':(M==='login'||M==='setup')?'lku':'lp1').focus(),50);lastM=M}
 $('lbio').hidden=!(M==='login'&&bioOn());
-$('lkf').hidden=M==='load';$('wu').hidden=!(M==='login'||M==='setup');$('w0').hidden=M!=='change';$('w2').hidden=M==='login'||M==='reset';$('rsbk_wrap').hidden=M!=='reset';$('lcx').hidden=!(M==='change'||M==='reset');$('lfg').hidden=M!=='login';
+$('lkf').hidden=M==='load';$('wu').hidden=!(M==='login'||M==='setup');$('w0').hidden=M!=='change';$('w2').hidden=M==='login'||M==='reset';$('rsbk_wrap').hidden=M!=='reset';$('lcx').hidden=!(M==='change'||M==='reset'||M==='pwreset');$('lfg').hidden=M!=='login';
 $('l1').textContent=(M==='login'||M==='reset')?'Mot de passe':'Nouveau mot de passe';
 $('lgo').textContent=M==='login'?'Ouvrir':M==='reset'?'Effacer maintenant':'Enregistrer';
 }
@@ -1570,16 +1570,25 @@ ADMIN_USER=u;
 if(b.length<4){msg('Le mot de passe doit avoir au moins 4 caractères.');return}
 if(b!==c){msg('Les deux mots de passe ne sont pas identiques.');return}
 const s=uid()+uid();PW={s,h:await hpw(b,s)};
-await savePw();ROLE='admin';sess(PW.h);M='';gate()}
+await savePw();ROLE='admin';sess(PW.h);RESETLINK=false;M='';gate()}
 }catch(e){msg('Erreur. Réessayez.')}};
 $('lim').value=String(LIM/60000);
 $('lim').onchange=()=>{LIM=+$('lim').value*60000;try{localStorage.setItem('suivi-lim',$('lim').value)}catch(e){}};
 $('lbio').onclick=bioLogin;
 $('ebio').onclick=async()=>{if(bioOn()){if(await askConfirm('Désactiver l’empreinte digitale sur cet appareil ?')){try{localStorage.removeItem('suivi-bio')}catch(e){}}}else bioEnable()};
-$('lcx').onclick=()=>{M='';gate()};
+$('lcx').onclick=()=>{if(M==='pwreset')RESETLINK=false;M='';gate()};
 $('cpw').onclick=()=>{if(!PW){alert('Aucun mot de passe défini pour le moment.');return}M='change';gate()};
 $('lkn').onclick=()=>{M='';lockNow()};
 $('lfg').onclick=async()=>{
+if(DB&&ADMIN_EMAIL&&window.firebase&&firebase.auth){
+if(!(await askConfirm('Un lien va être envoyé par email à '+ADMIN_EMAIL+'. Ouvrez-le depuis cet appareil pour choisir un nouveau mot de passe. Votre mot de passe actuel reste valable jusque-là.','Mot de passe oublié')))return;
+try{
+const actionCodeSettings={url:location.origin+location.pathname,handleCodeInApp:true};
+await firebase.auth().sendSignInLinkToEmail(ADMIN_EMAIL,actionCodeSettings);
+try{localStorage.setItem('suivi-reset-email',ADMIN_EMAIL)}catch(e){}
+alert('Email envoyé à '+ADMIN_EMAIL+'. Ouvrez le lien reçu depuis cet appareil pour choisir un nouveau mot de passe.');
+}catch(e){alert('Envoi impossible pour le moment (vérifiez la connexion Internet). Vous pouvez réessayer, ou utiliser la sauvegarde locale depuis Réglages.')}
+return}
 if(!(await askConfirm('Supprimer le mot de passe actuel de la base (partagée sur tous les téléphones) ? Vos ventes, dépenses, stock et autres données ne sont pas touchés — vous pourrez recréer un mot de passe juste après. Une sauvegarde va être téléchargée sur cet appareil'+(ADMIN_EMAIL?', et aussi envoyée par email à '+ADMIN_EMAIL:'')+'.','Mot de passe oublié')))return;
 await doBackup();
 await sendBackupEmail();
@@ -1715,7 +1724,19 @@ $('mg').onclick=async()=>{try{const o=JSON.parse(localStorage.getItem('suivi-ven
 if(!FIREBASE_CONFIG||!FIREBASE_CONFIG.apiKey){ready=true;gate();return}
 try{
 firebase.initializeApp(FIREBASE_CONFIG);
-firebase.auth().signInAnonymously().then(()=>{startDb(firebase.firestore())}).catch(()=>{ready=true;gate();alert('Connexion au serveur impossible. Vérifiez votre connexion Internet.')});
+const boot=()=>firebase.auth().signInAnonymously().then(()=>{startDb(firebase.firestore())}).catch(()=>{ready=true;gate();alert('Connexion au serveur impossible. Vérifiez votre connexion Internet.')});
+if(firebase.auth().isSignInWithEmailLink(window.location.href)){
+let em;try{em=localStorage.getItem('suivi-reset-email')}catch(e){}
+if(!em)em=prompt('Confirmez votre adresse email pour continuer :')||'';
+firebase.auth().signInWithEmailLink(em,window.location.href).then(()=>{
+try{localStorage.removeItem('suivi-reset-email');window.history.replaceState({},document.title,location.pathname)}catch(e){}
+RESETLINK=true;startDb(firebase.firestore())
+}).catch(()=>{
+try{window.history.replaceState({},document.title,location.pathname)}catch(e){}
+alert('Lien invalide ou expiré. Redemandez « mot de passe oublié » depuis l’écran de connexion.');
+boot()
+});
+}else boot();
 }catch(e){ready=true;gate()}
 })();
 async function give(name,data){

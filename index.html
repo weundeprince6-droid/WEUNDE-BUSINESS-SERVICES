@@ -744,7 +744,7 @@ dlgClose(out)};
 $('dlgCancel').onclick=()=>dlgClose(null);
 const CUR_OPTS=[{v:'FC',t:'Francs (FC)'},{v:'USD',t:'Dollars ($)'}];
 const RESET_CATS=[{v:'sales',t:'Ventes'},{v:'exp',t:'Dépenses'},{v:'cash',t:'Caisse (apports/retraits + argent de départ)'},{v:'debts',t:'Dettes'},{v:'credits',t:'Créances clients'},{v:'ristourne',t:'Ristourne'},{v:'equip',t:'État du matériel'},{v:'maintenance',t:'Maintenance à payer'}];
-let S={sales:[],exp:[],cur:'FC',stock:[],debts:[],credits:[],clients:[],ristourne:[],ristGroups:[],ristLoans:[],emps:[],sectors:[],equip:[],maintenance:[],rate:2800,cash:{open:{FC:0,USD:0},moves:[]}};
+let S={sales:[],exp:[],cur:'FC',stock:[],debts:[],credits:[],clients:[],ristourne:[],ristGroups:[],ristLoans:[],emps:[],sectors:[],equip:[],maintenance:[],locaux:[],workers:[],suppliers:[],rate:2800,cash:{open:{FC:0,USD:0},moves:[]}};
 let DB=null;
 const nopen=v=>typeof v==='number'?{FC:v,USD:0}:{FC:+(v&&v.FC)||0,USD:+(v&&v.USD)||0};
 try{const r=localStorage.getItem('suivi-ventes');if(r){const o=JSON.parse(r);if(o&&o.sales&&o.exp)S=o}}catch(e){}
@@ -1685,7 +1685,7 @@ await putDoc(DB.doc('cfg/main'),c);
 alert('Données envoyées dans le partage.')
 }catch(e){fail(e)}}
 function startDb(d){
-DB=d;S={sales:[],exp:[],cur:'FC',stock:[],debts:[],credits:[],clients:[],ristourne:[],ristGroups:[],ristLoans:[],emps:[],sectors:[],equip:[],maintenance:[],rate:2800,attendance:{},cash:{open:{FC:0,USD:0},moves:[]}};
+DB=d;S={sales:[],exp:[],cur:'FC',stock:[],debts:[],credits:[],clients:[],ristourne:[],ristGroups:[],ristLoans:[],emps:[],sectors:[],equip:[],maintenance:[],locaux:[],rate:2800,attendance:{},cash:{open:{FC:0,USD:0},moves:[]}};
 S.workers=[];S.suppliers=[];S.wStored=false;
 ready=false;PW=null;if(M!=='change')gate();
 setTimeout(()=>{if(!ready&&M==='load')msg('Connexion lente : vérifiez Internet.')},8000);

@@ -1440,7 +1440,7 @@ else{try{if(PW2)localStorage.setItem('suivi-pw2',JSON.stringify(PW2));else local
 async function matchEmp(u,pw){
 for(const e of S.emps){
 if(e.username&&key(e.username)!==key(u))continue;
-if(await hpw(pw,e.s)===e.h){ROLE='employee';CUR=e.id;fails=0;sess(e.h);gate();return true}}
+if(await hpw(pw,e.s)===e.h){ROLE=e.admin?'admin':'employee';CUR=e.id;fails=0;sess(e.h);gate();return true}}
 return false}
 async function codeTaken(code,exceptId){
 if(PW&&await hpw(code,PW.s)===PW.h)return true;
@@ -1488,7 +1488,7 @@ function applyRole(){
 const emp=ROLE==='employee';
 document.body.classList.toggle('role-employee',emp);
 const e=curEmp();
-$('profcard').hidden=!(emp&&e);
+$('profcard').hidden=!e;
 $('rolebadge').textContent='Accès employé'+(e&&e.name?' — '+e.name:'')+' — saisie du jour seulement';
 if(emp)show('j');
 if(ROLE==='admin'&&PW2&&!_mig){_mig=true;const o=PW2;PW2=null;cfg({emps:{[uid()]:{name:'Employé',phone:'',note:'',s:o.s,h:o.h}}});savePw2()}
@@ -1496,10 +1496,10 @@ renderEmps()}
 function renderEmps(){
 const e=curEmp();
 if(e)$('profinfo').textContent='Nom d’utilisateur : '+(e.username||'—')+' · Nom : '+(e.name||'—')+' · Téléphone : '+(e.phone||'—')+' · Secteur : '+(e.secteur||'—')+' · Fonction / note : '+(e.note||'—');
-$('empl').innerHTML=S.emps.length?S.emps.map(x=>`<li><span class="t">${esc(x.name||'Sans nom')}<small>${x.username?'@'+esc(x.username)+' · ':''}${esc(x.phone||'—')}${x.secteur?' · '+esc(x.secteur):''}${x.note?' · '+esc(x.note):''}</small></span><button class="x" data-ee="${x.id}" style="font-size:.85rem;color:var(--pri);font-weight:700">Modifier</button><button class="x" data-er="${x.id}" style="font-size:.85rem;color:var(--pri);font-weight:700">Code</button><button class="x" data-ed="${x.id}" aria-label="Supprimer">✕</button></li>`).join(''):'<li class="empty">Aucun employé. Ajoutez-en un ci-dessous.</li>'}
-const PF=x=>[{id:'pe_n',label:'Nom complet',type:'text',value:x?x.name:''},{id:'pe_u',label:'Nom d’utilisateur (pour se connecter)',type:'text',value:x?x.username:''},{id:'pe_t',label:'Téléphone',type:'text',value:x?x.phone:''},{id:'pe_s',label:'Secteur (facultatif)',type:'select',options:[{v:'',t:'Non précisé'},...S.sectors.map(s=>({v:s.name,t:s.name}))],value:x?x.secteur||'':''},{id:'pe_o',label:'Fonction / adresse / note',type:'text',value:x?x.note:''}];
+$('empl').innerHTML=S.emps.length?S.emps.map(x=>`<li><span class="t">${esc(x.name||'Sans nom')}${x.admin?' <b style="color:var(--pri)">· Administrateur</b>':''}<small>${x.username?'@'+esc(x.username)+' · ':''}${esc(x.phone||'—')}${x.secteur?' · '+esc(x.secteur):''}${x.note?' · '+esc(x.note):''}</small></span><button class="x" data-ee="${x.id}" style="font-size:.85rem;color:var(--pri);font-weight:700">Modifier</button><button class="x" data-er="${x.id}" style="font-size:.85rem;color:var(--pri);font-weight:700">Code</button><button class="x" data-ed="${x.id}" aria-label="Supprimer">✕</button></li>`).join(''):'<li class="empty">Aucun employé. Ajoutez-en un ci-dessous.</li>'}
+const PF=(x,allowAdmin)=>[{id:'pe_n',label:'Nom complet',type:'text',value:x?x.name:''},{id:'pe_u',label:'Nom d’utilisateur (pour se connecter)',type:'text',value:x?x.username:''},{id:'pe_t',label:'Téléphone',type:'text',value:x?x.phone:''},{id:'pe_s',label:'Secteur (facultatif)',type:'select',options:[{v:'',t:'Non précisé'},...S.sectors.map(s=>({v:s.name,t:s.name}))],value:x?x.secteur||'':''},{id:'pe_o',label:'Fonction / adresse / note',type:'text',value:x?x.note:''},...(allowAdmin?[{id:'pe_a',label:'Niveau d’accès',type:'select',options:[{v:'',t:'Employé — saisie du jour seulement'},{v:'admin',t:'Administrateur — accès complet'}],value:x&&x.admin?'admin':''}]:[])];
 $('empadd').onclick=async()=>{
-const r=await askFields('Nouvel employé','',[...PF(null),{id:'pe_c',label:'Code de connexion (4 caractères minimum)',type:'text',value:'',mask:true}]);
+const r=await askFields('Nouvel employé','',[...PF(null,true),{id:'pe_c',label:'Code de connexion (4 caractères minimum)',type:'text',value:'',mask:true}]);
 if(!r)return;
 if(!r.pe_n){alert('Indiquez le nom de l’employé.');return}
 if(!r.pe_u||r.pe_u.length<2){alert('Indiquez un nom d’utilisateur (2 caractères minimum).');return}
@@ -1507,7 +1507,7 @@ if(usernameTaken(r.pe_u,null)){alert('Ce nom d’utilisateur est déjà utilisé
 if(r.pe_c.length<4){alert('Le code doit avoir au moins 4 caractères.');return}
 if(await codeTaken(r.pe_c,null)){alert('Ce code est déjà utilisé. Choisissez-en un autre.');return}
 const s=uid()+uid();
-cfg({emps:{[uid()]:{name:r.pe_n,username:r.pe_u,phone:r.pe_t,secteur:r.pe_s,note:r.pe_o,s,h:await hpw(r.pe_c,s)}}})};
+cfg({emps:{[uid()]:{name:r.pe_n,username:r.pe_u,phone:r.pe_t,secteur:r.pe_s,note:r.pe_o,admin:r.pe_a==='admin',s,h:await hpw(r.pe_c,s)}}})};
 $('profedit').onclick=async()=>{
 const e=curEmp();if(!e)return;
 const r=await askFields('Mon profil','',PF(e));
@@ -1528,11 +1528,11 @@ const s=uid()+uid(),hh=await hpw(r.pw_n,s);
 sess(hh);cfg({emps:{[e.id]:{s,h:hh}}});alert('Mot de passe changé.')};
 document.addEventListener('click',async ev=>{const d=ev.target.dataset||{};
 if(d.ee){const x=S.emps.find(v=>v.id===d.ee);if(!x)return;
-const r=await askFields('Modifier l’employé','',PF(x));if(!r)return;
+const r=await askFields('Modifier l’employé','',PF(x,true));if(!r)return;
 if(!r.pe_n){alert('Indiquez le nom.');return}
 if(!r.pe_u||r.pe_u.length<2){alert('Indiquez un nom d’utilisateur (2 caractères minimum).');return}
 if(usernameTaken(r.pe_u,x.id)){alert('Ce nom d’utilisateur est déjà utilisé. Choisissez-en un autre.');return}
-cfg({emps:{[x.id]:{name:r.pe_n,username:r.pe_u,phone:r.pe_t,secteur:r.pe_s,note:r.pe_o}}})}
+cfg({emps:{[x.id]:{name:r.pe_n,username:r.pe_u,phone:r.pe_t,secteur:r.pe_s,note:r.pe_o,admin:r.pe_a==='admin'}}})}
 if(d.er){const x=S.emps.find(v=>v.id===d.er);if(!x)return;
 const r=await askFields('Nouveau code — '+x.name,'',[{id:'rc_n',label:'Nouveau code (4 caractères minimum)',type:'text',value:'',mask:true}]);if(!r)return;
 if(r.rc_n.length<4){alert('Le code doit avoir au moins 4 caractères.');return}
@@ -1641,7 +1641,7 @@ if(v.pay)for(const q in v.pay)S.debts[j].pay+=v.pay[q].a;
 if(v.mod){S.debts[j].amt=v.amt;S.debts[j].c=v.c;S.debts[j].amt0=v.amt0;S.debts[j].c0=v.c0;S.debts[j].mod=1}}}
 if(p.emps)for(const id in p.emps){const v=p.emps[id],i=S.emps.findIndex(s=>s.id===id);
 if(v===null){if(i>=0)S.emps.splice(i,1)}
-else if(i<0)S.emps.push({id,name:v.name||'',username:v.username||'',phone:v.phone||'',secteur:v.secteur||'',note:v.note||'',s:v.s,h:v.h});
+else if(i<0)S.emps.push({id,name:v.name||'',username:v.username||'',phone:v.phone||'',secteur:v.secteur||'',note:v.note||'',admin:!!v.admin,s:v.s,h:v.h});
 else Object.assign(S.emps[i],v)}
 if(p.credits)for(const id in p.credits){const v=p.credits[id],i=S.credits.findIndex(s=>s.id===id);
 if(v===null){if(i>=0)S.credits.splice(i,1)}
@@ -1701,7 +1701,7 @@ S.sales=sa.sort(so);S.exp=ex.sort(so);S.cash.moves=mv.sort(so);S.ristourne=rr.so
 d.doc('cfg/main').onSnapshot(s=>{
 const c=(s.exists&&s.data())||{};
 S.cur=c.cur||'FC';S.rate=+c.rate||2800;
-S.emps=Object.entries(c.emps||{}).filter(e=>e[1]).map(([id,v])=>({id,name:v.name||'',username:v.username||'',phone:v.phone||'',secteur:v.secteur||'',note:v.note||'',s:v.s,h:v.h}));
+S.emps=Object.entries(c.emps||{}).filter(e=>e[1]).map(([id,v])=>({id,name:v.name||'',username:v.username||'',phone:v.phone||'',secteur:v.secteur||'',note:v.note||'',admin:!!v.admin,s:v.s,h:v.h}));
 PW=c.pw&&c.pw.h?{s:c.pw.s,h:c.pw.h}:null;PW2=c.pw2&&c.pw2.h?{s:c.pw2.s,h:c.pw2.h}:null;ADMIN_USER=c.adminUser||'admin';ADMIN_EMAIL=c.adminEmail||'';if($('aem')&&document.activeElement!==$('aem'))$('aem').value=ADMIN_EMAIL;ready=true;gate();S.cash.open=nopen(c.open);
 S.stock=Object.entries(c.stock||{}).filter(e=>e[1]).map(([id,v])=>{
 const recs=Object.entries(v.ins||{}).map(([rid,e])=>({id:rid,q:+(e&&e.q!==undefined?e.q:e)||0,d:(e&&e.d)||'',mod:!!(e&&e.mod),q0:+((e&&e.q0)||0),d0:(e&&e.d0)||''}));

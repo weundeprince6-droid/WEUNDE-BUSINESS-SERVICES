@@ -990,6 +990,104 @@ main{
   .sum>div:nth-child(3){grid-column:auto}
   .sum>div{min-height:88px}
 }
+
+
+/* Tableau de bord ESE DB — organisation et indicateurs enrichis */
+.ese-dashboard{display:block;margin:0 0 18px;min-width:0}
+.ed-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 0 13px;padding:2px 2px 0}
+.ed-eyebrow{font-size:.68rem;font-weight:850;letter-spacing:1.5px;color:var(--pri)}
+.ed-head h2{margin:4px 0 2px;font-size:1.35rem;font-weight:850;letter-spacing:-.5px;color:var(--ink)}
+.ed-head p,.ed-panel-title p{margin:0;color:var(--mut);font-size:.78rem}
+.ed-unit{padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--mut);font-size:.72rem;font-weight:750;white-space:nowrap}
+.ed-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:13px}
+.ed-kpi{display:flex;flex-direction:column;justify-content:center;gap:7px;min-width:0;min-height:112px;padding:16px;border:1px solid var(--line);border-top:4px solid var(--pri);border-radius:15px;background:var(--card);box-shadow:0 5px 16px rgba(20,38,62,.06)}
+.ed-kpi>span{color:var(--mut);font-size:.68rem;font-weight:850;letter-spacing:.08em}
+.ed-kpi strong{color:var(--ink);font:900 clamp(1rem,1.7vw,1.4rem)/1.2 var(--numfont);overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.ed-kpi small{color:var(--mut);font-size:.72rem}
+.ed-kpi-rev{border-top-color:#15966b}.ed-kpi-exp{border-top-color:#d69a28}.ed-kpi-bal{border-top-color:var(--pri)}.ed-kpi-qty{border-top-color:#8a6bc4}
+.ed-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.85fr);gap:13px}
+.ed-panel{min-width:0;padding:17px;border:1px solid var(--line);border-radius:15px;background:var(--card);box-shadow:0 5px 16px rgba(20,38,62,.05)}
+.ed-panel-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.ed-panel-title h3{margin:0 0 4px;color:var(--ink);font-size:.92rem;font-weight:850}
+.ed-legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--mut);font-size:.68rem}
+.ed-legend span{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.ed-legend i{width:8px;height:8px;border-radius:3px;display:inline-block}
+.ed-rev-dot,.ed-rev{background:#15966b}.ed-exp-dot,.ed-exp{background:#d69a28}
+.ed-chart{height:126px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:end;padding:4px 2px 0}
+.ed-day{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;min-width:0}
+.ed-bars{height:100px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px;border-bottom:1px solid var(--line)}
+.ed-bars i{display:block;width:min(13px,32%);min-height:3px;border-radius:4px 4px 0 0}
+.ed-day small{font-size:.65rem;color:var(--mut);text-transform:capitalize}
+.ed-footnote{margin-top:9px;color:var(--mut);font-size:.66rem}
+.ed-alerts ul{list-style:none;padding:0;margin:0}
+.ed-alerts li{display:flex;flex-direction:column;gap:4px;padding:10px 0;border-top:1px solid var(--line)}
+.ed-alerts li:first-child{border-top:0;padding-top:0}
+.ed-alerts li b{font-size:.78rem;color:var(--ink)}
+.ed-alerts li span{font-size:.72rem;color:var(--mut);line-height:1.45}
+.ed-warn{color:var(--neg)!important}.ed-good{color:#15966b!important}
+.ed-count{display:grid;place-items:center;min-width:27px;height:27px;padding:0 7px;border-radius:9px;background:color-mix(in srgb,var(--pri) 12%,var(--card));color:var(--pri);font-size:.78rem;font-weight:850}
+.ed-best ol{list-style:none;margin:0;padding:0;counter-reset:best}
+.ed-best li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);counter-increment:best}
+.ed-best li:first-child{border-top:0;padding-top:0}
+.ed-best li span{min-width:0;color:var(--ink);font-size:.77rem}
+.ed-best li b{flex:0 0 auto;color:var(--pri);font-size:.75rem}
+.ed-empty{margin:0;color:var(--mut);font-size:.76rem;line-height:1.5}
+.ed-insight>p{margin:0 0 12px;color:var(--ink);font-size:.83rem;line-height:1.5}
+.ed-insight-stats{display:flex;flex-wrap:wrap;gap:8px}
+.ed-insight-stats span{padding:8px 10px;border-radius:9px;background:var(--bg);color:var(--mut);font-size:.7rem}
+.ed-insight-stats b{color:var(--ink);font-size:.85rem}
+@media(max-width:879px){.ed-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ed-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.ed-head{align-items:flex-start;flex-direction:column}.ed-kpis{gap:8px}.ed-kpi{min-height:96px;padding:12px}.ed-kpi strong{font-size:1rem}.ed-panel{padding:13px}.ed-chart{gap:4px}.ed-legend{gap:7px}}
+
+
+/* ESE DB — harmonisation visuelle des espaces de gestion */
+.tab-intro{position:relative;overflow:hidden;margin:0 0 16px;padding:19px 18px 17px;border:1px solid color-mix(in srgb,var(--pri) 28%,var(--line));border-radius:15px;background:linear-gradient(125deg,var(--pri),color-mix(in srgb,var(--pri) 72%,#2b9b75));color:#fff;box-shadow:0 5px 16px rgba(20,38,62,.16)}
+.tab-intro:after{content:"";position:absolute;width:150px;height:150px;border:1px solid rgba(255,255,255,.16);border-radius:50%;right:-48px;top:-72px;box-shadow:0 0 0 22px rgba(255,255,255,.045),0 0 0 44px rgba(255,255,255,.035)}
+.tab-intro .tab-kicker{display:block;font-size:.68rem;font-weight:800;letter-spacing:1.35px;opacity:.82;margin-bottom:5px}
+.tab-intro h2{font-size:1.22rem;line-height:1.2;margin:0 0 7px;color:#fff}
+.tab-intro p{font-size:.86rem;line-height:1.5;margin:0;max-width:560px;color:rgba(255,255,255,.9)}
+.intro-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.intro-tags span{font-size:.68rem;font-weight:700;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);color:#fff}
+#content>section:not([hidden])>.card{border-radius:13px;padding:16px;margin-bottom:13px;box-shadow:0 3px 12px rgba(20,38,62,.075);transition:box-shadow .18s,border-color .18s}
+#content>section:not([hidden])>.card h2{font-size:1rem;line-height:1.3;margin:0 0 12px;padding-bottom:9px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+#content>section:not([hidden])>.card h2:before{content:"";display:inline-block;width:4px;height:17px;border-radius:4px;background:var(--pri);flex:0 0 4px}
+#content label{display:block;font-size:.82rem;font-weight:650;color:var(--mut);margin:10px 0 5px}
+#content input:not([type=checkbox]):not([type=radio]),#content select,#content textarea{border-radius:9px;border:1px solid var(--line);background:var(--bg);min-height:42px;padding:9px 11px;color:var(--ink);font:inherit;max-width:100%;transition:border-color .15s,box-shadow .15s}
+#content input:focus,#content select:focus,#content textarea:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 16%,transparent)}
+#content .go{border-radius:10px;min-height:42px;font-weight:750;letter-spacing:.1px;box-shadow:0 2px 5px rgba(20,38,62,.1)}
+#content .row{gap:12px}
+#content table{border-collapse:separate;border-spacing:0;width:100%;overflow:hidden;border:1px solid var(--line);border-radius:10px;font-size:.84rem}
+#content th{background:color-mix(in srgb,var(--pri) 11%,var(--card));color:var(--ink);font-weight:750}
+#content th,#content td{padding:10px 9px;border-bottom:1px solid var(--line)}
+#content tr:last-child td{border-bottom:0}
+#content tbody tr:nth-child(even){background:color-mix(in srgb,var(--pri) 4%,var(--card))}
+#content .list{padding-left:0;list-style:none}
+#content .list>li{padding:11px 12px;margin:7px 0;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb,var(--pri) 3%,var(--card));line-height:1.45}
+#content .sum{gap:10px}
+#content .sum>div{border-radius:12px!important;border:1px solid var(--line);box-shadow:0 2px 8px rgba(20,38,62,.06)}
+.tabs button{border-radius:10px;transition:transform .15s,background .15s,border-color .15s}
+.tabs button[aria-selected="true"]{box-shadow:inset 0 -2px 0 var(--pri),0 2px 8px rgba(20,38,62,.08)}
+@media(max-width:520px){.tab-intro{padding:16px 14px;border-radius:12px}.tab-intro h2{font-size:1.1rem}.tab-intro p{font-size:.81rem}#content>section:not([hidden])>.card{padding:13px;border-radius:11px}#content th,#content td{padding:8px 7px;font-size:.78rem}}
+
+
+/* Correctif : le panneau des réglages doit sortir de la bannière et passer au-dessus des raccourcis */
+#fixedIntro{z-index:260!important;isolation:isolate}
+#fixedIntro .ese-hero{overflow:visible!important}
+#fixedIntro .ese-settings{z-index:280!important}
+#fixedIntro .ese-settings[open]{z-index:300!important}
+#fixedIntro .ese-controls{z-index:320!important;max-height:min(70vh,260px);overflow-y:auto}
+#fixedIntro .ese-settings summary{position:relative;z-index:321}
+@media(max-width:700px){
+ #fixedIntro .ese-controls{top:calc(100% + 8px);left:50%;transform:translateX(-50%);width:min(360px,calc(100vw - 24px));max-height:min(58vh,240px)}
+ #fixedIntro .ese-controls>div{min-width:0}
+}
+
+
+/* Onglet Opérations : espace unique pour ventes, achats et dépenses */
+#content>section#vo .tab-intro{margin-bottom:16px}
+#content>section#vo>.card{border-top:3px solid var(--pri)}
+#content>section#vo>.card h2{margin-bottom:14px}
+@media(min-width:880px){#content>section#vo .mrow{align-items:start}}
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */

@@ -872,6 +872,27 @@ main{
   main{padding-top:calc(var(--hdrH,92px) + var(--introH,150px) + 8px)!important}
 }
 
+
+/* Réglages du jour intégrés dans la bannière verte */
+.ese-hero{min-height:0!important;padding:18px clamp(16px,2.5vw,30px)!important}
+.ese-hero-copy{max-width:900px!important;width:100%}
+.ese-hero h1{font-size:clamp(1.2rem,2.4vw,1.75rem)!important}
+.ese-hero p{margin:5px 0 10px!important;font-size:.82rem!important}
+.ese-controls{display:grid;grid-template-columns:minmax(150px,1.1fr) minmax(125px,.8fr) minmax(150px,1fr);gap:9px;max-width:720px}
+.ese-controls>div{display:flex;align-items:center;gap:8px;min-width:0}
+.ese-controls label{flex:0 0 auto;margin:0;color:#e0f2e9;font-size:.75rem;font-weight:750;white-space:nowrap}
+.ese-controls input,.ese-controls select{width:100%;min-width:0;min-height:34px;height:34px;padding:5px 8px;border:1px solid #ffffff66;border-radius:8px;background:#ffffff;color:#173b30;font-size:.82rem}
+.ese-controls input:focus,.ese-controls select:focus{outline:2px solid #bcebd8;outline-offset:1px}
+@media(max-width:700px){
+ .ese-hero{padding:13px 12px!important}
+ .ese-hero-mark{display:none!important}
+ .ese-hero p{font-size:.72rem!important;margin-bottom:8px!important}
+ .ese-controls{grid-template-columns:1fr 1fr;gap:7px}
+ .ese-controls>div{display:block}
+ .ese-controls label{display:block;margin:0 0 3px;font-size:.68rem}
+ .ese-controls>div:last-child{grid-column:1/-1}
+ .ese-controls input,.ese-controls select{min-height:32px;height:32px;font-size:.78rem}
+}
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */
@@ -943,6 +964,11 @@ main{
     <span class="ese-kicker">ESE DB · ESPACE DE GESTION</span>
     <h1>Votre activité, en un seul regard.</h1>
     <p>Suivez vos ventes, vos dépenses, votre stock et votre caisse depuis un espace simple et organisé.</p>
+    <div class="ese-controls">
+      <div><label for="date">Date</label><input type="date" id="date"></div>
+      <div><label for="cur">Totaux en</label><select id="cur"><option value="FC">Francs</option><option value="USD">Dollars</option></select></div>
+      <div><label for="rt">1 $ = … FC</label><input id="rt" type="number" inputmode="decimal" min="0"></div>
+    </div>
   </div>
   <div class="ese-hero-mark" aria-hidden="true">ESE<span>DB</span></div>
 </div>
@@ -971,11 +997,7 @@ main{
 <div id="content">
 <section id="vj">
 <div class="ese-dashboard"></div>
-<div class="card top wide">
-<div><label for="date">Date</label><input type="date" id="date"></div>
-<div><label for="cur">Totaux en</label><select id="cur"><option value="FC">Francs</option><option value="USD">Dollars</option></select></div>
-<div><label for="rt">1 $ = … FC</label><input id="rt" type="number" inputmode="decimal" min="0"></div>
-</div>
+
 <p class="neg" id="lockmsg" hidden style="margin:0 0 10px;font-weight:600">Jour passé : consultation seulement. Pour saisir ou corriger, choisissez la date d’aujourd’hui.</p>
 <div class="sum" id="sum"></div>
 

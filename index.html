@@ -231,9 +231,26 @@ th{background:var(--bg);color:var(--mut)}
  .card{padding:15px}
 }
 @media(max-width:380px){.ese-hero-mark{display:none}.ese-shortcuts{grid-template-columns:1fr 1fr}.tabs button{min-width:76px;padding:9px 10px}}
+/* Bouton de changement de thème — choix manuel indépendant du navigateur */
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:700 .78rem/1 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:background .2s,border-color .2s,transform .2s}
+.theme-toggle:hover{border-color:var(--pri);transform:translateY(-1px)}
+.theme-toggle:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.theme-icon{font-size:1rem;line-height:1}
+@media(max-width:700px){#pageheader .rightwrap{flex-wrap:wrap;justify-content:flex-end}.theme-toggle{padding:7px 9px;min-height:35px;font-size:.72rem}.theme-label{display:inline}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 
 </style>
+<script>
+/* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */
+(function(){
+  try {
+    var saved = localStorage.getItem('ese-db-theme');
+    document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
+  } catch(e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+})();
+</script>
 </head>
 <body>
 <div id="lk">
@@ -280,6 +297,7 @@ th{background:var(--bg);color:var(--mut)}
 </div>
 <p class="modepill" id="mode"><span class="dot"></span><span id="modetxt">Mode local : les données sont seulement sur cet appareil.</span></p>
 <div class="rightwrap">
+<button type="button" id="themeToggle" class="theme-toggle" aria-label="Activer le mode sombre" aria-pressed="false"><span class="theme-icon" aria-hidden="true">🌙</span><span class="theme-label">Mode sombre</span></button>
 <p class="clockbox" id="clock"></p>
 <button class="x" id="lkn" style="font-size:.85rem;font-weight:600;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:var(--card);padding:8px 12px;box-shadow:0 1px 4px rgba(20,38,62,.12);display:inline-flex;align-items:center"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Verrouiller</button>
 </div>
@@ -1913,6 +1931,30 @@ const h=n.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
 $('clock').innerHTML='<span class="d">'+d+'</span><span class="h">'+h+'</span>';
 }
 tickClock();setInterval(tickClock,15000);
+</script>
+<script>
+(function(){
+  var root=document.documentElement;
+  var btn=document.getElementById('themeToggle');
+  if(!btn)return;
+  function applyTheme(theme){
+    var dark=theme==='dark';
+    root.setAttribute('data-theme',dark?'dark':'light');
+    btn.setAttribute('aria-pressed',dark?'true':'false');
+    btn.setAttribute('aria-label',dark?'Activer le mode clair':'Activer le mode sombre');
+    btn.innerHTML=dark
+      ? '<span class="theme-icon" aria-hidden="true">☀️</span><span class="theme-label">Mode clair</span>'
+      : '<span class="theme-icon" aria-hidden="true">🌙</span><span class="theme-label">Mode sombre</span>';
+    var meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.setAttribute('content',dark?'#101a17':'#f4f7f5');
+    try{localStorage.setItem('ese-db-theme',dark?'dark':'light')}catch(e){}
+  }
+  var current=root.getAttribute('data-theme')==='dark'?'dark':'light';
+  applyTheme(current);
+  btn.addEventListener('click',function(){
+    applyTheme(root.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+})();
 </script>
 </body>
 </html>

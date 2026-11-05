@@ -1157,22 +1157,18 @@ main{
 
 /* Caisse : titre à gauche et indicateurs financiers alignés à droite */
 #content .cash-overview{
- display:grid;
- grid-template-columns:minmax(250px,.85fr) minmax(0,1.5fr);
- gap:16px;
- align-items:stretch;
+ display:flex;
+ flex-direction:column;
+ gap:12px;
  margin:0 0 14px;
 }
-#content .cash-overview>.tab-intro{margin:0;min-width:0;display:flex;flex-direction:column;justify-content:center}
+#content .cash-overview>.tab-intro{margin:0;min-width:0}
 #content .cash-summary{min-width:0;display:flex;flex-direction:column;justify-content:center;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 5px 16px rgba(20,38,62,.05)}
 #content .cash-summary .sum-caption{margin:0 0 4px}
 #content .cash-summary .sum{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:10px 0 0}
 #content .cash-summary .sum>div{min-height:96px;padding:12px}
 #content .cash-summary .sum b{font-size:clamp(.95rem,1.25vw,1.2rem)}
-@media(max-width:879px){
- #content .cash-overview{grid-template-columns:1fr;gap:10px}
- #content .cash-summary .sum{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
+
 @media(max-width:520px){
  #content .cash-summary{padding:12px}
  #content .cash-summary .sum{gap:7px}

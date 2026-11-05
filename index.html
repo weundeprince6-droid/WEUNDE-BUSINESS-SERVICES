@@ -979,6 +979,36 @@ main{
 @media(max-width:879px){.ed-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ed-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.ed-head{align-items:flex-start;flex-direction:column}.ed-kpis{gap:8px}.ed-kpi{min-height:96px;padding:12px}.ed-kpi strong{font-size:1rem}.ed-panel{padding:13px}.ed-chart{gap:4px}.ed-legend{gap:7px}}
 
+
+/* ESE DB — harmonisation visuelle des espaces de gestion */
+.tab-intro{position:relative;overflow:hidden;margin:0 0 16px;padding:19px 18px 17px;border:1px solid color-mix(in srgb,var(--pri) 28%,var(--line));border-radius:15px;background:linear-gradient(125deg,var(--pri),color-mix(in srgb,var(--pri) 72%,#2b9b75));color:#fff;box-shadow:0 5px 16px rgba(20,38,62,.16)}
+.tab-intro:after{content:"";position:absolute;width:150px;height:150px;border:1px solid rgba(255,255,255,.16);border-radius:50%;right:-48px;top:-72px;box-shadow:0 0 0 22px rgba(255,255,255,.045),0 0 0 44px rgba(255,255,255,.035)}
+.tab-intro .tab-kicker{display:block;font-size:.68rem;font-weight:800;letter-spacing:1.35px;opacity:.82;margin-bottom:5px}
+.tab-intro h2{font-size:1.22rem;line-height:1.2;margin:0 0 7px;color:#fff}
+.tab-intro p{font-size:.86rem;line-height:1.5;margin:0;max-width:560px;color:rgba(255,255,255,.9)}
+.intro-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.intro-tags span{font-size:.68rem;font-weight:700;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);color:#fff}
+#content>section:not([hidden])>.card{border-radius:13px;padding:16px;margin-bottom:13px;box-shadow:0 3px 12px rgba(20,38,62,.075);transition:box-shadow .18s,border-color .18s}
+#content>section:not([hidden])>.card h2{font-size:1rem;line-height:1.3;margin:0 0 12px;padding-bottom:9px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+#content>section:not([hidden])>.card h2:before{content:"";display:inline-block;width:4px;height:17px;border-radius:4px;background:var(--pri);flex:0 0 4px}
+#content label{display:block;font-size:.82rem;font-weight:650;color:var(--mut);margin:10px 0 5px}
+#content input:not([type=checkbox]):not([type=radio]),#content select,#content textarea{border-radius:9px;border:1px solid var(--line);background:var(--bg);min-height:42px;padding:9px 11px;color:var(--ink);font:inherit;max-width:100%;transition:border-color .15s,box-shadow .15s}
+#content input:focus,#content select:focus,#content textarea:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 16%,transparent)}
+#content .go{border-radius:10px;min-height:42px;font-weight:750;letter-spacing:.1px;box-shadow:0 2px 5px rgba(20,38,62,.1)}
+#content .row{gap:12px}
+#content table{border-collapse:separate;border-spacing:0;width:100%;overflow:hidden;border:1px solid var(--line);border-radius:10px;font-size:.84rem}
+#content th{background:color-mix(in srgb,var(--pri) 11%,var(--card));color:var(--ink);font-weight:750}
+#content th,#content td{padding:10px 9px;border-bottom:1px solid var(--line)}
+#content tr:last-child td{border-bottom:0}
+#content tbody tr:nth-child(even){background:color-mix(in srgb,var(--pri) 4%,var(--card))}
+#content .list{padding-left:0;list-style:none}
+#content .list>li{padding:11px 12px;margin:7px 0;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb,var(--pri) 3%,var(--card));line-height:1.45}
+#content .sum{gap:10px}
+#content .sum>div{border-radius:12px!important;border:1px solid var(--line);box-shadow:0 2px 8px rgba(20,38,62,.06)}
+.tabs button{border-radius:10px;transition:transform .15s,background .15s,border-color .15s}
+.tabs button[aria-selected="true"]{box-shadow:inset 0 -2px 0 var(--pri),0 2px 8px rgba(20,38,62,.08)}
+@media(max-width:520px){.tab-intro{padding:16px 14px;border-radius:12px}.tab-intro h2{font-size:1.1rem}.tab-intro p{font-size:.81rem}#content>section:not([hidden])>.card{padding:13px;border-radius:11px}#content th,#content td{padding:8px 7px;font-size:.78rem}}
+
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */
@@ -1138,6 +1168,7 @@ main{
 </section>
 
 <section id="vm" hidden>
+<div class="tab-intro"><span class="tab-kicker">PILOTAGE & ANALYSE</span><h2>Rapports et statistiques</h2><p>Suivez les résultats de votre activité, comparez les journées et identifiez les produits et dépenses qui influencent votre bénéfice.</p><div class="intro-tags"><span>Vue mensuelle</span><span>Évolution</span><span>Performance</span></div></div>
 <div class="card">
 <label for="mon">Mois</label><input type="month" id="mon">
 </div>
@@ -1168,6 +1199,7 @@ main{
 </div>
 </section>
 <section id="vs" hidden>
+<div class="tab-intro"><span class="tab-kicker">INVENTAIRE & APPROVISIONNEMENT</span><h2>Gestion intelligente du stock</h2><p>Contrôlez les quantités disponibles, repérez les produits à réapprovisionner et suivez les entrées et sorties de marchandises.</p><div class="intro-tags"><span>Alertes de stock</span><span>Entrées</span><span>Produits</span></div></div>
 <p class="neg" id="alert" style="margin:0 0 10px;font-weight:600"></p>
 <button class="go" id="shpo" hidden style="margin-bottom:10px;background:var(--card);color:var(--ink);border:1px solid var(--line)">Générer les bons de commande</button>
 <div class="card">
@@ -1261,6 +1293,7 @@ main{
 </div>
 </section>
 <section id="vc" hidden>
+<div class="tab-intro"><span class="tab-kicker">TRÉSORERIE</span><h2>Suivi de la caisse</h2><p>Visualisez l’argent réellement disponible, les mouvements par devise et l’évolution de votre trésorerie au fil des jours.</p><div class="intro-tags"><span>Solde disponible</span><span>Francs & dollars</span><span>Mouvements</span></div></div>
 <div class="card" style="text-align:center">
 <small style="color:var(--mut)">Somme restante en caisse</small>
 <div id="cbig" style="font-size:2rem;font-weight:800;margin:4px 0"></div>
@@ -1304,6 +1337,7 @@ main{
 </div>
 </section>
 <section id="vd" hidden>
+<div class="tab-intro"><span class="tab-kicker">ENGAGEMENTS FINANCIERS</span><h2>Dettes et paiements</h2><p>Centralisez les sommes à payer, les arriérés et les remboursements pour mieux anticiper vos prochaines sorties d’argent.</p><div class="intro-tags"><span>À payer</span><span>Historique</span><span>Règlements</span></div></div>
 <div class="sum" id="dsum"></div>
 <div class="card" style="margin-top:14px">
 <h2>Payer une dette ou un arriéré</h2>
@@ -1357,6 +1391,7 @@ main{
 </div>
 </section>
 <section id="vr" hidden>
+<div class="tab-intro"><span class="tab-kicker">ÉPARGNE & CRÉDITS</span><h2>Gestion de la ristourne</h2><p>Suivez les contributions, les retraits et les emprunts de chaque groupe avec une vision claire des soldes et remboursements.</p><div class="intro-tags"><span>Contributions</span><span>Emprunts</span><span>Remboursements</span></div></div>
 <div id="rgSum"></div>
 <div class="card">
 <h2>Mouvements de la ristourne (dépôts / retraits)</h2>
@@ -1428,6 +1463,7 @@ main{
 </div>
 </section>
 <section id="vp" hidden>
+<div class="tab-intro"><span class="tab-kicker">ÉQUIPE & ORGANISATION</span><h2>Gestion du personnel</h2><p>Organisez les présences, les employés et les secteurs de votre établissement depuis un seul espace.</p><div class="intro-tags"><span>Présences</span><span>Employés</span><span>Secteurs</span></div></div>
 <div class="card">
 <h2>Présence</h2>
 <label for="prd">Date</label>
@@ -1456,6 +1492,7 @@ main{
 </div>
 </section>
 <section id="vsv" hidden>
+<div class="tab-intro"><span class="tab-kicker">PROTECTION DES DONNÉES</span><h2>Sauvegarde et restauration</h2><p>Protégez les informations de votre base. Créez régulièrement une copie de sécurité et restaurez-la en cas de changement ou de perte d’appareil.</p><div class="intro-tags"><span>Copie de sécurité</span><span>Restauration</span><span>Export Excel</span></div></div>
 <div class="card">
 <h2>Sauvegarde</h2>
 <p class="empty" style="margin-bottom:6px">Les données restent sur cet appareil. Sauvegardez-les régulièrement, par exemple chaque soir.</p>
@@ -1468,6 +1505,7 @@ main{
 </div>
 </section>
 <section id="vse" hidden>
+<div class="tab-intro"><span class="tab-kicker">ACCÈS & CONFIDENTIALITÉ</span><h2>Sécurité de votre base</h2><p>Gérez vos identifiants, les options de verrouillage et les paramètres qui protègent l’accès à vos données.</p><div class="intro-tags"><span>Compte</span><span>Verrouillage</span><span>Protection</span></div></div>
 <div class="card">
 <h2>Mot de passe</h2>
 <button class="go" id="cuser" style="background:var(--card);color:var(--ink);border:1px solid var(--line)">Changer mon nom d’utilisateur</button>
@@ -1493,6 +1531,7 @@ main{
 </div>
 </section>
 <section id="vma" hidden>
+<div class="tab-intro"><span class="tab-kicker">ÉQUIPEMENTS & ENTRETIEN</span><h2>Suivi du matériel</h2><p>Gardez un inventaire de vos équipements, surveillez leur état et anticipez les besoins de maintenance.</p><div class="intro-tags"><span>Inventaire</span><span>État</span><span>Maintenance</span></div></div>
 <div class="card">
 <h2>Matériel enregistré</h2>
 <ul class="list" id="mal"></ul>

@@ -237,6 +237,107 @@ th{background:var(--bg);color:var(--mut)}
 .theme-toggle:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
 .theme-icon{font-size:1rem;line-height:1}
 @media(max-width:700px){#pageheader .rightwrap{flex-wrap:wrap;justify-content:flex-end}.theme-toggle{padding:7px 9px;min-height:35px;font-size:.72rem}.theme-label{display:inline}}
+/* ===== Disposition MY WORLD RS : en-tête compact + navigation latérale ===== */
+#pageheader{
+  margin:0 0 14px;
+  padding:8px clamp(16px,3vw,40px);
+  border-radius:0 0 15px 15px;
+  box-shadow:0 4px 16px rgba(20,38,62,.07);
+}
+#pageheader .brandbar{gap:9px;margin:0;min-height:48px}
+#pageheader .seal{width:36px;height:36px;font-size:.85rem;border-radius:11px}
+#pageheader .brandname{font-size:1.05rem;line-height:1.1}
+#pageheader .brandtag{font-size:.7rem;margin-top:2px}
+#pageheader .modepill{padding:4px 9px;font-size:.7rem}
+#pageheader .clockbox{padding:4px 9px;border-radius:9px}
+#pageheader .clockbox .d{font-size:.65rem}
+#pageheader .clockbox .h{font-size:.88rem}
+#pageheader .rightwrap{gap:8px}
+#pageheader #lkn{padding:7px 10px!important;font-size:.75rem!important}
+#pageheader .role-badge{margin-top:3px;font-size:.68rem}
+@media(min-width:880px){
+  main{padding-top:8px}
+  .appgrid{
+    display:grid;
+    grid-template-columns:235px minmax(0,1fr);
+    gap:25px;
+    align-items:start;
+  }
+  .tabs{
+    position:sticky;
+    top:76px;
+    z-index:4;
+    display:flex;
+    flex-direction:column;
+    flex-wrap:nowrap;
+    align-items:stretch;
+    gap:5px;
+    width:100%;
+    margin:0;
+    padding:17px 12px;
+    overflow:visible;
+    border:1px solid var(--line);
+    border-radius:17px;
+    background:var(--card);
+    box-shadow:var(--shadow);
+  }
+  .tabs:before{
+    content:"MENU PRINCIPAL";
+    display:block;
+    padding:2px 11px 10px;
+    color:var(--mut);
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.3px;
+  }
+  .tabs button{
+    display:flex;
+    flex:0 0 auto;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+    gap:12px;
+    width:100%;
+    min-width:0;
+    min-height:43px;
+    padding:10px 12px;
+    border:1px solid transparent;
+    border-radius:11px;
+    border-bottom:1px solid transparent;
+    background:transparent;
+    color:var(--mut);
+    text-align:left;
+    font-size:.84rem;
+    font-weight:650;
+    box-shadow:none;
+  }
+  .tabs button .icon{width:20px;height:20px;margin:0;flex:0 0 20px}
+  .tabs button:hover{background:var(--bg);color:var(--ink)}
+  .tabs button[aria-selected="true"]{
+    background:color-mix(in srgb,var(--pri) 12%,var(--card));
+    color:var(--pri);
+    border-color:transparent;
+    border-bottom-color:transparent;
+    box-shadow:none;
+  }
+  .tabs button[aria-selected="true"] .icon{color:var(--pri)}
+  #content{min-width:0}
+}
+@media(max-width:879px){
+  #pageheader{padding:8px 13px;margin-bottom:12px}
+  #pageheader .brandbar{min-height:44px}
+  .appgrid{display:block}
+  .tabs{position:sticky;top:0;z-index:5}
+}
+@media(max-width:700px){
+  #pageheader .brandname{font-size:.95rem}
+  #pageheader .brandtag{font-size:.65rem}
+  #pageheader .seal{width:32px;height:32px}
+  #pageheader .modepill{font-size:.64rem;padding:4px 7px}
+  #pageheader .rightwrap{gap:6px}
+  #pageheader .clockbox{padding:4px 7px}
+  #pageheader #lkn{padding:6px 8px!important}
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 
 </style>

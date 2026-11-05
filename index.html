@@ -916,21 +916,74 @@ main{
  #fixedIntro .ese-hero-mark{display:none!important}
 }
 
-/* Cartes de synthèse : libellés et montants clairement séparés */
-.sum{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch}
-.sum div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;min-width:0;min-height:104px;padding:16px 10px;border:1px solid var(--line);border-top:4px solid var(--pri);border-radius:13px;background:var(--card);box-shadow:0 4px 12px rgba(20,38,62,.08)}
-.sum div::before{display:none}
-.sum div:nth-child(1){border-top-color:#15966b}
-.sum div:nth-child(2){border-top-color:#d69a28}
-.sum div:nth-child(3){border-top-color:var(--neg)}
-.sum small{display:block;margin:0;color:var(--mut);font-size:.76rem;font-weight:800;letter-spacing:.075em;text-transform:uppercase;line-height:1.25;text-align:center}
-.sum b{display:block;max-width:100%;font:900 clamp(1.05rem,2.2vw,1.45rem)/1.25 var(--numfont);text-align:center;overflow-wrap:anywhere;word-break:normal;font-variant-numeric:tabular-nums}
-@media(max-width:520px){
- .sum{grid-template-columns:1fr;gap:9px}
- .sum div{min-height:78px;gap:6px;padding:12px}
- .sum b{font-size:1.2rem}
+/* Cartes de synthèse — recettes, dépenses et bénéfice */
+.sum{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  align-items:stretch;
+  margin:16px 0;
 }
-
+.sum>div{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  min-width:0;
+  min-height:118px;
+  padding:17px 18px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-top:0;
+  border-radius:15px;
+  background:var(--card);
+  box-shadow:0 5px 16px rgba(20,38,62,.08);
+}
+.sum>div::before{
+  content:'';
+  position:absolute;
+  inset:0 auto 0 0;
+  width:5px;
+  border-radius:15px 0 0 15px;
+  background:#15966b;
+}
+.sum>div:nth-child(2)::before{background:#d69a28}
+.sum>div:nth-child(3)::before{background:var(--pri)}
+.sum small{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  margin:0;
+  color:var(--mut);
+  font-size:.73rem;
+  font-weight:850;
+  letter-spacing:.075em;
+  text-transform:uppercase;
+  line-height:1.3;
+  text-align:left;
+}
+.sum b{
+  display:block;
+  width:100%;
+  max-width:100%;
+  color:var(--ink);
+  font:900 clamp(1.05rem,2vw,1.5rem)/1.2 var(--numfont);
+  text-align:left;
+  overflow-wrap:anywhere;
+  font-variant-numeric:tabular-nums;
+}
+.sum>div:nth-child(1){background:linear-gradient(135deg,var(--card),rgba(21,150,107,.07))}
+.sum>div:nth-child(2){background:linear-gradient(135deg,var(--card),rgba(214,154,40,.09))}
+.sum>div:nth-child(3){background:linear-gradient(135deg,var(--card),rgba(29,78,137,.08))}
+.sum>div:nth-child(3) b{color:var(--grn)}
+.sum>div:nth-child(3) b.neg{color:var(--neg)}
+@media(max-width:600px){
+  .sum{grid-template-columns:1fr;gap:10px}
+  .sum>div{min-height:86px;padding:13px 16px;gap:8px}
+  .sum b{font-size:1.2rem}
+}
 
 /* Tableau de bord ESE DB — organisation et indicateurs enrichis */
 .ese-dashboard{display:block;margin:0 0 18px;min-width:0}

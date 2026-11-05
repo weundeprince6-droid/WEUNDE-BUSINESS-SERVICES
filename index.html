@@ -828,6 +828,50 @@ main{
   main{padding-top:calc(var(--hdrH, 92px) + 6px)!important}
 }
 
+
+/* Zone supérieure entièrement immobile : bannière + quatre accès rapides. */
+#fixedIntro{
+  position:fixed!important;
+  top:var(--hdrH,80px)!important;
+  left:50%!important;
+  transform:translateX(-50%);
+  width:97%;
+  box-sizing:border-box;
+  padding:0 20px 10px;
+  z-index:95;
+  background:var(--bg);
+  box-shadow:0 8px 16px rgba(15,55,40,.08);
+}
+#fixedIntro .ese-hero{
+  position:relative!important;
+  top:auto!important;
+  margin:0!important;
+  border-radius:0 0 14px 14px;
+}
+#fixedIntro .ese-shortcuts{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;
+  margin:9px 0 0;
+}
+#fixedIntro .ese-shortcuts button{
+  justify-content:center;
+  min-width:0;
+  min-height:42px;
+  padding:8px 10px;
+  white-space:nowrap;
+}
+main{
+  padding-top:calc(var(--hdrH,80px) + var(--introH,190px) + 10px)!important;
+}
+@media(max-width:700px){
+  #fixedIntro{width:100%;padding:0 10px 8px}
+  #fixedIntro .ese-hero{padding:10px 13px!important}
+  #fixedIntro .ese-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:7px}
+  #fixedIntro .ese-shortcuts button{min-height:36px;padding:6px 7px;font-size:.68rem;white-space:normal}
+  main{padding-top:calc(var(--hdrH,92px) + var(--introH,150px) + 8px)!important}
+}
+
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */
@@ -893,7 +937,7 @@ main{
 </div>
 <span class="role-badge" id="rolebadge">Accès employé — saisie du jour seulement</span>
 </div>
-<main>
+<div id="fixedIntro">
 <div class="ese-hero">
   <div class="ese-hero-copy">
     <span class="ese-kicker">ESE DB · ESPACE DE GESTION</span>
@@ -902,6 +946,14 @@ main{
   </div>
   <div class="ese-hero-mark" aria-hidden="true">ESE<span>DB</span></div>
 </div>
+<div class="ese-shortcuts" aria-label="Accès rapides">
+  <button type="button" onclick="document.getElementById('tj').click()"><span>＋</span> Nouvelle journée</button>
+  <button type="button" onclick="document.getElementById('tm').click()"><span>▥</span> Voir les rapports</button>
+  <button type="button" onclick="document.getElementById('ts').click()"><span>▦</span> Gérer le stock</button>
+  <button type="button" onclick="document.getElementById('tc').click()"><span>◉</span> Ouvrir la caisse</button>
+</div>
+</div>
+<main>
 <div class="appgrid">
 <div class="tabs" role="tablist">
 <button role="tab" id="tj" aria-selected="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>Jour</button>
@@ -918,14 +970,7 @@ main{
 
 <div id="content">
 <section id="vj">
-<div class="ese-dashboard">
-<div class="ese-shortcuts" aria-label="Accès rapides">
-  <button type="button" onclick="document.getElementById('tj').click()"><span>＋</span> Nouvelle journée</button>
-  <button type="button" onclick="document.getElementById('tm').click()"><span>▥</span> Voir les rapports</button>
-  <button type="button" onclick="document.getElementById('ts').click()"><span>▦</span> Gérer le stock</button>
-  <button type="button" onclick="document.getElementById('tc').click()"><span>◉</span> Ouvrir la caisse</button>
-</div>
-</div>
+<div class="ese-dashboard"></div>
 <div class="card top wide">
 <div><label for="date">Date</label><input type="date" id="date"></div>
 <div><label for="cur">Totaux en</label><select id="cur"><option value="FC">Francs</option><option value="USD">Dollars</option></select></div>
@@ -1646,7 +1691,7 @@ flush(null)
 })
 }catch(e){}
 }
-function syncHdrH(){try{const h=$('pageheader');if(h)document.documentElement.style.setProperty('--hdrH',h.offsetHeight+'px')}catch(e){}}
+function syncHdrH(){try{const h=$('pageheader'),i=$('fixedIntro');if(h)document.documentElement.style.setProperty('--hdrH',h.offsetHeight+'px');if(i)document.documentElement.style.setProperty('--introH',i.offsetHeight+'px')}catch(e){}}
 let _lcT;window.addEventListener('resize',()=>{clearTimeout(_lcT);_lcT=setTimeout(()=>{syncHdrH();layoutCols()},200)});
 $('tj').onclick=()=>show('j');$('tm').onclick=()=>show('m');$('ts').onclick=()=>show('s');$('tc').onclick=()=>show('c');$('td').onclick=()=>show('d');$('tr').onclick=()=>show('r');$('tp').onclick=()=>show('p');$('tsv').onclick=()=>show('sv');$('tse').onclick=()=>show('se');$('tma').onclick=()=>show('ma');
 const key=s=>s.trim().toLowerCase();

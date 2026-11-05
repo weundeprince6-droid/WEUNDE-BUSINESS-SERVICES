@@ -893,6 +893,28 @@ main{
  .ese-controls>div:last-child{grid-column:1/-1}
  .ese-controls input,.ese-controls select{min-height:32px;height:32px;font-size:.78rem}
 }
+
+/* Un seul bouton central pour ouvrir les réglages */
+#fixedIntro .ese-hero{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(70px,110px)!important;align-items:center!important;gap:16px!important}
+#fixedIntro .ese-hero-copy{grid-column:1;max-width:none!important}
+#fixedIntro .ese-settings{grid-column:2;position:relative;z-index:4;align-self:center}
+#fixedIntro .ese-settings summary{display:flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;border:1px solid #ffffff75;border-radius:999px;background:#ffffff18;color:#fff;font:750 .82rem Inter,system-ui,sans-serif;white-space:nowrap;cursor:pointer;list-style:none;box-shadow:0 5px 14px #062b2030;transition:background .2s,transform .2s}
+#fixedIntro .ese-settings summary::-webkit-details-marker{display:none}
+#fixedIntro .ese-settings summary:hover,#fixedIntro .ese-settings[open] summary{background:#ffffff30;transform:translateY(-1px)}
+#fixedIntro .ese-controls{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;width:min(650px,calc(100vw - 30px));max-width:none;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 14px 34px #0003}
+#fixedIntro .ese-controls>div{display:flex;flex-direction:column;align-items:stretch;gap:5px}
+#fixedIntro .ese-controls label{color:var(--ink);font-size:.73rem}
+#fixedIntro .ese-controls input,#fixedIntro .ese-controls select{width:100%;height:38px;min-height:38px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+#fixedIntro .ese-hero-mark{grid-column:3;justify-self:end}
+@media(max-width:700px){
+ #fixedIntro .ese-hero{grid-template-columns:minmax(0,1fr) auto!important;gap:8px!important}
+ #fixedIntro .ese-hero-copy{grid-column:1/-1}
+ #fixedIntro .ese-settings{grid-column:1/-1;justify-self:center;margin:2px 0 3px}
+ #fixedIntro .ese-settings summary{min-height:36px;padding:7px 17px;font-size:.75rem}
+ #fixedIntro .ese-controls{grid-template-columns:1fr 1fr;width:min(360px,calc(100vw - 24px));padding:10px;gap:8px}
+ #fixedIntro .ese-controls>div:last-child{grid-column:1/-1}
+ #fixedIntro .ese-hero-mark{display:none!important}
+}
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */
@@ -964,12 +986,15 @@ main{
     <span class="ese-kicker">ESE DB · ESPACE DE GESTION</span>
     <h1>Votre activité, en un seul regard.</h1>
     <p>Suivez vos ventes, vos dépenses, votre stock et votre caisse depuis un espace simple et organisé.</p>
+  </div>
+  <details class="ese-settings">
+    <summary>⚙ Réglages du jour</summary>
     <div class="ese-controls">
       <div><label for="date">Date</label><input type="date" id="date"></div>
       <div><label for="cur">Totaux en</label><select id="cur"><option value="FC">Francs</option><option value="USD">Dollars</option></select></div>
       <div><label for="rt">1 $ = … FC</label><input id="rt" type="number" inputmode="decimal" min="0"></div>
     </div>
-  </div>
+  </details>
   <div class="ese-hero-mark" aria-hidden="true">ESE<span>DB</span></div>
 </div>
 <div class="ese-shortcuts" aria-label="Accès rapides">

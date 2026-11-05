@@ -1088,6 +1088,72 @@ main{
 #content>section#vo>.card{border-top:3px solid var(--pri)}
 #content>section#vo>.card h2{margin-bottom:14px}
 @media(min-width:880px){#content>section#vo .mrow{align-items:start}}
+
+/* Harmonisation des montants dans tous les onglets — style des indicateurs du tableau de bord */
+#content .sum{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:12px;
+  margin:15px 0 19px;
+  text-align:left;
+}
+#content .sum>div{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:8px;
+  min-width:0;
+  min-height:108px;
+  padding:16px;
+  overflow:hidden;
+  border:1px solid var(--line)!important;
+  border-top:4px solid var(--pri)!important;
+  border-radius:15px!important;
+  background:var(--card)!important;
+  box-shadow:0 5px 16px rgba(20,38,62,.06)!important;
+  text-align:left;
+}
+#content .sum>div:nth-child(4n+1){border-top-color:#15966b!important}
+#content .sum>div:nth-child(4n+2){border-top-color:#d69a28!important}
+#content .sum>div:nth-child(4n+3){border-top-color:var(--pri)!important}
+#content .sum>div:nth-child(4n+4){border-top-color:#8a6bc4!important}
+#content .sum>div::before{display:none!important}
+#content .sum small{
+  display:block;
+  margin:0;
+  color:var(--mut);
+  font-size:.68rem;
+  font-weight:850;
+  letter-spacing:.07em;
+  line-height:1.35;
+  text-transform:uppercase;
+  text-align:left;
+}
+#content .sum b{
+  display:block;
+  width:100%;
+  margin:0;
+  color:var(--ink);
+  font:900 clamp(1.05rem,1.7vw,1.4rem)/1.2 var(--numfont);
+  text-align:left;
+  overflow-wrap:anywhere;
+  font-variant-numeric:tabular-nums;
+}
+#content .sum>div:nth-child(3) b{color:var(--grn)}
+#content .sum>div:nth-child(3) b.neg{color:var(--neg)}
+@media(max-width:879px){
+  #content .sum{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  #content .sum>div{min-height:94px;padding:13px}
+}
+@media(max-width:430px){
+  #content .sum{gap:8px}
+  #content .sum>div{min-height:84px;padding:11px}
+  #content .sum small{font-size:.63rem}
+  #content .sum b{font-size:1rem}
+}
+
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */

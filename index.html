@@ -915,6 +915,22 @@ main{
  #fixedIntro .ese-controls>div:last-child{grid-column:1/-1}
  #fixedIntro .ese-hero-mark{display:none!important}
 }
+
+/* Cartes de synthèse : libellés et montants clairement séparés */
+.sum{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch}
+.sum div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;min-width:0;min-height:104px;padding:16px 10px;border:1px solid var(--line);border-top:4px solid var(--pri);border-radius:13px;background:var(--card);box-shadow:0 4px 12px rgba(20,38,62,.08)}
+.sum div::before{display:none}
+.sum div:nth-child(1){border-top-color:#15966b}
+.sum div:nth-child(2){border-top-color:#d69a28}
+.sum div:nth-child(3){border-top-color:var(--neg)}
+.sum small{display:block;margin:0;color:var(--mut);font-size:.76rem;font-weight:800;letter-spacing:.075em;text-transform:uppercase;line-height:1.25;text-align:center}
+.sum b{display:block;max-width:100%;font:900 clamp(1.05rem,2.2vw,1.45rem)/1.25 var(--numfont);text-align:center;overflow-wrap:anywhere;word-break:normal;font-variant-numeric:tabular-nums}
+@media(max-width:520px){
+ .sum{grid-template-columns:1fr;gap:9px}
+ .sum div{min-height:78px;gap:6px;padding:12px}
+ .sum b{font-size:1.2rem}
+}
+
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */

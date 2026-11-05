@@ -1688,6 +1688,17 @@ function renderDashboard(d){
   const openDebt=S.debts.filter(x=>rest(x)>0).reduce((a,x)=>a+cv(rest(x),x.c),0);
   const openCredit=S.credits.filter(x=>restc(x)>0).reduce((a,x)=>a+cv(restc(x),x.c),0);
   const stockValue=S.stock.length;
+  // Graphique des recettes et dépenses sur les 7 derniers jours
+  const days=[];
+  const base=new Date(d+'T12:00:00');
+  for(let i=6;i>=0;i--){
+    const dt=new Date(base);dt.setDate(dt.getDate()-i);
+    const key=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+    const r=tot(S.sales.filter(x=>x.d===key)),e=tot(S.exp.filter(x=>x.d===key));
+    days.push({label:dt.toLocaleDateString('fr-FR',{weekday:'short'}).replace('.',''),r,e});
+  }
+  const max=Math.max(1,...days.flatMap(x=>[x.r,x.e]));
+  const trend=days.map(x=>'<div class="ed-day"><div class="ed-bars"><i class="ed-rev" style="height:'+Math.max(3,x.r/max*100)+'%" title="Recettes : '+fmt(x.r)+'"></i><i class="ed-exp" style="height:'+Math.max(3,x.e/max*100)+'%" title="Dépenses : '+fmt(x.e)+'"></i></div><small>'+x.label+'</small></div>').join('');
   const alerts=[];
   if(low.length)alerts.push('<li><b class="ed-warn">'+low.length+' produit(s) à réapprovisionner</b><span>'+low.slice(0,6).map(p=>esc(p.name)+' ('+level(p)+' restant)').join(' · ')+(low.length>6?' · …':'')+'</span></li>');
   if(openDebt>0)alerts.push('<li><b>Dettes et montants à payer</b><span>'+fmt(openDebt)+' encore à régler</span></li>');
@@ -1702,6 +1713,7 @@ function renderDashboard(d){
       '<article class="ed-kpi ed-kpi-rev"><span>CRÉANCES CLIENTS</span><strong>'+fmt(openCredit)+'</strong><small>Montants à récupérer</small></article>'+
     '</div>'+
     '<div class="ed-grid">'+
+      '<section class="ed-panel ed-trend"><div class="ed-panel-title"><div><h3>Activité des 7 derniers jours</h3><p>Évolution des recettes et des dépenses</p></div><div class="ed-legend"><span><i class="ed-rev-dot"></i> Recettes</span><span><i class="ed-exp-dot"></i> Dépenses</span></div></div><div class="ed-chart">'+trend+'</div><div class="ed-footnote">Montants convertis selon le taux de change configuré.</div></section>'+
       '<section class="ed-panel ed-alerts"><div class="ed-panel-title"><div><h3>Points à surveiller</h3><p>Stocks et engagements en attente</p></div><span class="ed-count">'+(low.length+(openDebt>0?1:0)+(openCredit>0?1:0))+'</span></div><ul>'+alerts.join('')+'</ul></section>'+
       '<section class="ed-panel ed-insight"><div class="ed-panel-title"><div><h3>Organisation de votre espace</h3><p>Accédez directement à la bonne rubrique</p></div></div><p>Les ventes et les achats sont désormais regroupés dans l’onglet <b>Opérations</b>. Le tableau de bord reste consacré à la surveillance générale de votre activité.</p><div class="ed-insight-stats"><span><b>'+nf(stockValue)+'</b> références en stock</span><span><b>'+nf(low.length)+'</b> alertes à traiter</span></div></section>'+
     '</div>';

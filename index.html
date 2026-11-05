@@ -807,6 +807,27 @@ main>.ese-hero .ese-hero-mark span{margin-top:-25px;font-size:.62rem}
   #content .card:not(.top) select{min-height:36px}
 }
 
+
+/* ===== Entête réellement fixe : elle ne défile plus avec la page ===== */
+#pageheader{
+  position:fixed!important;
+  top:0!important;
+  left:0!important;
+  right:0!important;
+  width:100%!important;
+  z-index:100!important;
+  border-radius:0!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+}
+/* Réserve exactement la place de l'entête pour éviter que le contenu passe dessous. */
+main{
+  padding-top:calc(var(--hdrH, 80px) + 8px)!important;
+}
+@media(max-width:700px){
+  main{padding-top:calc(var(--hdrH, 92px) + 6px)!important}
+}
+
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */

@@ -931,6 +931,54 @@ main{
  .sum b{font-size:1.2rem}
 }
 
+
+/* Tableau de bord ESE DB — organisation et indicateurs enrichis */
+.ese-dashboard{display:block;margin:0 0 18px;min-width:0}
+.ed-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 0 13px;padding:2px 2px 0}
+.ed-eyebrow{font-size:.68rem;font-weight:850;letter-spacing:1.5px;color:var(--pri)}
+.ed-head h2{margin:4px 0 2px;font-size:1.35rem;font-weight:850;letter-spacing:-.5px;color:var(--ink)}
+.ed-head p,.ed-panel-title p{margin:0;color:var(--mut);font-size:.78rem}
+.ed-unit{padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--mut);font-size:.72rem;font-weight:750;white-space:nowrap}
+.ed-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:13px}
+.ed-kpi{display:flex;flex-direction:column;justify-content:center;gap:7px;min-width:0;min-height:112px;padding:16px;border:1px solid var(--line);border-top:4px solid var(--pri);border-radius:15px;background:var(--card);box-shadow:0 5px 16px rgba(20,38,62,.06)}
+.ed-kpi>span{color:var(--mut);font-size:.68rem;font-weight:850;letter-spacing:.08em}
+.ed-kpi strong{color:var(--ink);font:900 clamp(1rem,1.7vw,1.4rem)/1.2 var(--numfont);overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.ed-kpi small{color:var(--mut);font-size:.72rem}
+.ed-kpi-rev{border-top-color:#15966b}.ed-kpi-exp{border-top-color:#d69a28}.ed-kpi-bal{border-top-color:var(--pri)}.ed-kpi-qty{border-top-color:#8a6bc4}
+.ed-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.85fr);gap:13px}
+.ed-panel{min-width:0;padding:17px;border:1px solid var(--line);border-radius:15px;background:var(--card);box-shadow:0 5px 16px rgba(20,38,62,.05)}
+.ed-panel-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.ed-panel-title h3{margin:0 0 4px;color:var(--ink);font-size:.92rem;font-weight:850}
+.ed-legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--mut);font-size:.68rem}
+.ed-legend span{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.ed-legend i{width:8px;height:8px;border-radius:3px;display:inline-block}
+.ed-rev-dot,.ed-rev{background:#15966b}.ed-exp-dot,.ed-exp{background:#d69a28}
+.ed-chart{height:126px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:end;padding:4px 2px 0}
+.ed-day{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;min-width:0}
+.ed-bars{height:100px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px;border-bottom:1px solid var(--line)}
+.ed-bars i{display:block;width:min(13px,32%);min-height:3px;border-radius:4px 4px 0 0}
+.ed-day small{font-size:.65rem;color:var(--mut);text-transform:capitalize}
+.ed-footnote{margin-top:9px;color:var(--mut);font-size:.66rem}
+.ed-alerts ul{list-style:none;padding:0;margin:0}
+.ed-alerts li{display:flex;flex-direction:column;gap:4px;padding:10px 0;border-top:1px solid var(--line)}
+.ed-alerts li:first-child{border-top:0;padding-top:0}
+.ed-alerts li b{font-size:.78rem;color:var(--ink)}
+.ed-alerts li span{font-size:.72rem;color:var(--mut);line-height:1.45}
+.ed-warn{color:var(--neg)!important}.ed-good{color:#15966b!important}
+.ed-count{display:grid;place-items:center;min-width:27px;height:27px;padding:0 7px;border-radius:9px;background:color-mix(in srgb,var(--pri) 12%,var(--card));color:var(--pri);font-size:.78rem;font-weight:850}
+.ed-best ol{list-style:none;margin:0;padding:0;counter-reset:best}
+.ed-best li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);counter-increment:best}
+.ed-best li:first-child{border-top:0;padding-top:0}
+.ed-best li span{min-width:0;color:var(--ink);font-size:.77rem}
+.ed-best li b{flex:0 0 auto;color:var(--pri);font-size:.75rem}
+.ed-empty{margin:0;color:var(--mut);font-size:.76rem;line-height:1.5}
+.ed-insight>p{margin:0 0 12px;color:var(--ink);font-size:.83rem;line-height:1.5}
+.ed-insight-stats{display:flex;flex-wrap:wrap;gap:8px}
+.ed-insight-stats span{padding:8px 10px;border-radius:9px;background:var(--bg);color:var(--mut);font-size:.7rem}
+.ed-insight-stats b{color:var(--ink);font-size:.85rem}
+@media(max-width:879px){.ed-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ed-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.ed-head{align-items:flex-start;flex-direction:column}.ed-kpis{gap:8px}.ed-kpi{min-height:96px;padding:12px}.ed-kpi strong{font-size:1rem}.ed-panel{padding:13px}.ed-chart{gap:4px}.ed-legend{gap:7px}}
+
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */
@@ -1037,11 +1085,9 @@ main{
 
 <div id="content">
 <section id="vj">
-<div class="ese-dashboard"></div>
+<div class="ese-dashboard" id="eseDashboard" aria-live="polite"></div>
 
 <p class="neg" id="lockmsg" hidden style="margin:0 0 10px;font-weight:600">Jour passé : consultation seulement. Pour saisir ou corriger, choisissez la date d’aujourd’hui.</p>
-<div class="sum" id="sum"></div>
-
 <div class="card" style="margin-top:14px">
 <h2>Ajouter une dépense</h2>
 <label for="et">Type</label>
@@ -1573,13 +1619,54 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const tot=a=>a.reduce((s,x)=>s+cv(x.q!==undefined?x.q*x.p:x.a,x.c),0);
 $('date').value=today();$('mon').value=today().slice(0,7);$('em').value=today().slice(0,7);$('dm').value=today().slice(0,7);$('cur').value=S.cur;$('rt').value=S.rate;$('co').value=S.cash.open.FC||'';$('cu').value=S.cash.open.USD||'';$('prd').value=today();
 
+
+function renderDashboard(d,vs,es){
+  const revenue=tot(vs),expense=tot(es),balance=revenue-expense;
+  const low=S.stock.filter(p=>level(p)<=p.min);
+  const openDebt=S.debts.filter(x=>rest(x)>0).reduce((a,x)=>a+cv(rest(x),x.c),0);
+  const openCredit=S.credits.filter(x=>restc(x)>0).reduce((a,x)=>a+cv(restc(x),x.c),0);
+  const soldQty=vs.reduce((a,x)=>a+(+x.q||0),0);
+  const best={};vs.forEach(x=>{const k=String(x.name||'').trim();if(k){best[k]=(best[k]||0)+cv(x.q*x.p,x.c)}});
+  const top=Object.entries(best).sort((a,b)=>b[1]-a[1]).slice(0,4);
+  const days=[];
+  const base=new Date(d+'T12:00:00');
+  for(let i=6;i>=0;i--){
+    const dt=new Date(base);dt.setDate(dt.getDate()-i);
+    const key=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+    const r=tot(S.sales.filter(x=>x.d===key)),e=tot(S.exp.filter(x=>x.d===key));
+    days.push({key,label:dt.toLocaleDateString('fr-FR',{weekday:'short'}).replace('.',''),r,e});
+  }
+  const max=Math.max(1,...days.flatMap(x=>[x.r,x.e]));
+  const trend=days.map(x=>'<div class="ed-day"><div class="ed-bars"><i class="ed-rev" style="height:'+Math.max(3,x.r/max*100)+'%" title="Recettes : '+fmt(x.r)+'"></i><i class="ed-exp" style="height:'+Math.max(3,x.e/max*100)+'%" title="Dépenses : '+fmt(x.e)+'"></i></div><small>'+x.label+'</small></div>').join('');
+  const status=balance<0?'Solde négatif : les dépenses dépassent les recettes.':vs.length===0?'Aucune vente enregistrée pour cette date.':balance===0?'Équilibre : recettes et dépenses sont égales.':'Solde positif : les recettes dépassent les dépenses.';
+  const alerts=[];
+  if(low.length)alerts.push('<li><b class="ed-warn">'+low.length+' produit(s) à réapprovisionner</b><span>'+low.slice(0,4).map(p=>esc(p.name)+' ('+level(p)+' restant)').join(' · ')+(low.length>4?' · …':'')+'</span></li>');
+  if(openDebt>0)alerts.push('<li><b>Dettes et montants à payer</b><span>'+fmt(openDebt)+' encore à régler</span></li>');
+  if(openCredit>0)alerts.push('<li><b>Créances clients</b><span>'+fmt(openCredit)+' à récupérer auprès des clients</span></li>');
+  if(!alerts.length)alerts.push('<li><b class="ed-good">Aucun signal prioritaire</b><span>Pas de stock bas ni de solde impayé détecté.</span></li>');
+  $('eseDashboard').innerHTML=
+    '<div class="ed-head"><div><span class="ed-eyebrow">VUE D’ENSEMBLE</span><h2>Tableau de bord</h2><p>Indicateurs du '+new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</p></div><span class="ed-unit">Devise : '+(S.cur==='USD'?'Dollars ($)':'Francs (FC)')+'</span></div>'+
+    '<div class="ed-kpis">'+
+      '<article class="ed-kpi ed-kpi-rev"><span>RECETTES</span><strong>'+fmt(revenue)+'</strong><small>'+vs.length+' vente(s) enregistrée(s)</small></article>'+
+      '<article class="ed-kpi ed-kpi-exp"><span>DÉPENSES</span><strong>'+fmt(expense)+'</strong><small>'+es.length+' dépense(s) enregistrée(s)</small></article>'+
+      '<article class="ed-kpi ed-kpi-bal"><span>BÉNÉFICE / SOLDE</span><strong class="'+(balance<0?'neg':'')+'">'+fmt(balance)+'</strong><small>'+(balance<0?'Déficit de la journée':balance>0?'Excédent de la journée':'À l’équilibre')+'</small></article>'+
+      '<article class="ed-kpi ed-kpi-qty"><span>ARTICLES VENDUS</span><strong>'+nf(soldQty)+'</strong><small>'+new Set(vs.map(x=>x.name)).size+' article(s) différent(s)</small></article>'+
+    '</div>'+
+    '<div class="ed-grid">'+
+      '<section class="ed-panel ed-trend"><div class="ed-panel-title"><div><h3>Activité des 7 derniers jours</h3><p>Comparaison des recettes et des dépenses</p></div><div class="ed-legend"><span><i class="ed-rev-dot"></i> Recettes</span><span><i class="ed-exp-dot"></i> Dépenses</span></div></div><div class="ed-chart">'+trend+'</div><div class="ed-footnote">Montants convertis selon le taux de change configuré.</div></section>'+
+      '<section class="ed-panel ed-alerts"><div class="ed-panel-title"><div><h3>Points à surveiller</h3><p>Éléments qui demandent votre attention</p></div><span class="ed-count">'+(low.length+(openDebt>0?1:0)+(openCredit>0?1:0))+'</span></div><ul>'+alerts.join('')+'</ul></section>'+
+      '<section class="ed-panel ed-best"><div class="ed-panel-title"><div><h3>Meilleures ventes du jour</h3><p>Articles classés par recettes</p></div></div>'+(top.length?'<ol>'+top.map(([n,v])=>'<li><span>'+esc(n)+'</span><b>'+fmt(v)+'</b></li>').join('')+'</ol>':'<p class="ed-empty">Les articles les plus vendus apparaîtront ici après les premières ventes.</p>')+'</section>'+
+      '<section class="ed-panel ed-insight"><div class="ed-panel-title"><div><h3>Lecture rapide</h3><p>Résumé automatique de la journée</p></div></div><p class="'+(balance<0?'neg':'')+'">'+status+'</p><div class="ed-insight-stats"><span><b>'+nf(soldQty)+'</b> unités vendues</span><span><b>'+vs.length+'</b> opérations de vente</span></div></section>'+
+    '</div>';
+}
+
 function sumBox(el,r,d,label){const s=r-d;el.innerHTML=`<div><small>Recettes</small><b>${fmt(r)}</b></div><div><small>Dépenses</small><b>${fmt(d)}</b></div><div><small>${label}</small><b class="${s<0?'neg':''}">${fmt(s)}</b></div>`}
 
 function render(){
 const d=$('date').value;
 const vs=S.sales.filter(x=>x.d===d),es=S.exp.filter(x=>x.d===d);
 const lk=d!==today();$('lockmsg').hidden=!lk;['addS','addE','addC'].forEach(i=>$(i).disabled=lk);
-sumBox($('sum'),tot(vs),tot(es),'Solde du jour');
+renderDashboard(d,vs,es);
 $('ls').innerHTML=vs.length?vs.map(x=>`<li><span class="t">${esc(x.name)}<small>${x.q} × ${fmtc(x.p,x.c)} · ${x.cat}${x.cl?' · client : '+esc(x.cl):''}${x.mod?' · corrigé (avant : '+x.q0+' × '+fmtc(x.p0,x.c0)+')':''}</small></span><b>${fmtc(x.q*x.p,x.c)}</b>${x.d===today()&&!x.mod?'<button class="x" data-mp="'+x.id+'" aria-label="Corriger la vente" style="font-size:.9rem;color:var(--pri);font-weight:700">Corriger</button>':''}${x.d===today()?'<button class="x" data-s="'+x.id+'" aria-label="Supprimer">✕</button>':''}</li>`).join(''):'<li class="empty">Aucune vente ce jour.</li>';
 const esAuthor=x=>x.by?((S.emps.find(e=>e.id===x.by)||{}).name||'Employé'):'';
 const esVis=ROLE==='employee'?es.filter(x=>x.by&&x.by===CUR):es;

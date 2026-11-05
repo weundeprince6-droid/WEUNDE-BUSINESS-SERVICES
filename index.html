@@ -340,6 +340,260 @@ th{background:var(--bg);color:var(--mut)}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 
+
+/* ===== Refonte de la zone de contenu : claire, aérée et cohérente ===== */
+#content{
+  min-width:0;
+  color:var(--ink);
+  padding:2px 0 28px;
+}
+#content>section{
+  min-width:0;
+  animation:eseContentIn .22s ease-out;
+}
+@keyframes eseContentIn{
+  from{opacity:.0;transform:translateY(5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+#content .card{
+  min-width:0;
+  padding:20px 22px;
+  margin:0 0 17px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:var(--card);
+  box-shadow:0 3px 14px rgba(24,55,42,.045);
+  transition:border-color .18s,box-shadow .18s,transform .18s;
+}
+#content .card:hover{
+  border-color:color-mix(in srgb,var(--pri) 28%,var(--line));
+  box-shadow:0 7px 22px rgba(24,55,42,.07);
+}
+#content .card h2{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:0 0 15px;
+  padding:0 0 12px;
+  border-bottom:1px solid var(--line);
+  color:var(--ink);
+  font-size:1rem;
+  font-weight:800;
+  letter-spacing:-.25px;
+  line-height:1.3;
+}
+#content .card h2:before{
+  content:"";
+  width:4px;
+  height:19px;
+  flex:0 0 4px;
+  border-radius:8px;
+  background:var(--pri);
+}
+#content .card p{color:var(--mut);line-height:1.55}
+#content label{
+  color:var(--mut);
+  font-size:.78rem;
+  font-weight:700;
+  letter-spacing:.1px;
+  margin:8px 0 5px;
+}
+#content input,#content select,#content textarea,#content .pwbox{
+  width:100%;
+  min-width:0;
+  min-height:43px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--ink);
+  font:inherit;
+  font-size:.9rem;
+  box-shadow:none;
+}
+#content input:focus,#content select:focus,#content textarea:focus,#content .pwbox:focus-within{
+  outline:none;
+  border-color:var(--pri);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 13%,transparent);
+}
+#content button.go{
+  min-height:43px;
+  padding:10px 17px;
+  border:0;
+  border-radius:10px;
+  background:var(--pri);
+  color:#fff;
+  font-size:.86rem;
+  font-weight:750;
+  box-shadow:0 4px 10px color-mix(in srgb,var(--pri) 17%,transparent);
+}
+#content button.go:hover{filter:brightness(.96);transform:translateY(-1px)}
+#content .top{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
+  align-items:end;
+  gap:14px;
+  padding:17px 19px;
+  background:linear-gradient(135deg,var(--card),color-mix(in srgb,var(--pri) 4%,var(--card)));
+}
+#content .top>div{min-width:0}
+#content .sum{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:13px;
+  margin:16px 0 20px;
+  text-align:left;
+}
+#content .sum>div{
+  min-width:0;
+  min-height:92px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:8px;
+  padding:15px 16px;
+  border:1px solid var(--line);
+  border-top:3px solid var(--pri);
+  border-radius:14px;
+  background:var(--card);
+  box-shadow:0 3px 12px rgba(24,55,42,.045);
+}
+#content .sum>div:nth-child(3n+2){border-top-color:var(--amber)}
+#content .sum>div:nth-child(3n+3){border-top-color:var(--grn)}
+#content .sum small{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:6px;
+  color:var(--mut);
+  font-size:.68rem;
+  font-weight:750;
+  letter-spacing:.55px;
+  text-transform:uppercase;
+  line-height:1.35;
+}
+#content .sum b{
+  display:block;
+  margin:0;
+  color:var(--ink);
+  font-size:clamp(1.05rem,1.6vw,1.4rem);
+  font-weight:850;
+  line-height:1.2;
+  overflow-wrap:anywhere;
+}
+#content .mrow{align-items:stretch;gap:16px;margin:0 0 16px}
+#content .mrow .mcol{gap:15px}
+#content .mrow .mcol>.card{height:auto}
+#content .tw{
+  max-width:100%;
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--card);
+}
+#content table{
+  min-width:520px;
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  font-size:.84rem;
+}
+#content th{
+  position:sticky;
+  top:0;
+  padding:12px 13px;
+  background:var(--bg);
+  color:var(--mut);
+  font-size:.7rem;
+  font-weight:800;
+  letter-spacing:.45px;
+  text-transform:uppercase;
+  border:0;
+  border-bottom:1px solid var(--line);
+}
+#content td{
+  padding:11px 13px;
+  border:0;
+  border-bottom:1px solid var(--line);
+  color:var(--ink);
+}
+#content tbody tr:last-child td{border-bottom:0}
+#content tbody tr:hover{background:color-mix(in srgb,var(--pri) 4%,var(--card))}
+#content .list li{
+  padding:12px 4px;
+  border-top:1px solid var(--line);
+  line-height:1.45;
+}
+#content .list li:first-child{border-top:0}
+#content .empty{
+  padding:13px 14px;
+  border:1px dashed var(--line);
+  border-radius:11px;
+  background:var(--bg);
+  color:var(--mut);
+  font-size:.85rem;
+}
+#content .neg{font-weight:700}
+#content .card .row{gap:13px}
+#content .card:not(.top)>h2{grid-column:1/-1}
+#content .card:not(.top)>label{
+  align-self:center;
+  margin:5px 0;
+  color:var(--mut);
+}
+#content .card:not(.top)>label+input,
+#content .card:not(.top)>label+select,
+#content .card:not(.top)>label+.ac-wrap{
+  align-self:center;
+}
+#content .card:not(.top)>.full{grid-column:1/-1!important}
+#content .card:not(.top)>button.go{
+  justify-self:end;
+  width:auto;
+  min-width:150px;
+  margin-top:7px;
+}
+#content .card button:not(.go):not(.x){
+  border-radius:9px;
+}
+@media(min-width:880px){
+  #content{padding:0 0 30px}
+  #content .card{padding:19px 21px;margin-bottom:15px}
+  #content .card:not(.top){
+    grid-template-columns:minmax(125px,165px) minmax(0,1fr);
+    column-gap:16px;
+    row-gap:9px;
+    align-items:center;
+  }
+  #content .card:not(.top)>h2{margin-bottom:7px}
+  #content .card:not(.top)>label{font-size:.76rem}
+  #content input,#content select{min-height:40px}
+}
+@media(max-width:879px){
+  #content .mrow{display:block}
+  #content .mrow .mcol{display:contents}
+  #content .card{padding:16px;margin-bottom:13px}
+  #content .card:not(.top){display:block}
+  #content .card:not(.top)>label{margin:10px 0 5px}
+  #content .card:not(.top)>button.go{width:100%;margin-top:13px}
+  #content .sum{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  #content .sum>div{min-height:82px;padding:12px}
+}
+@media(max-width:430px){
+  #content .card{padding:14px;border-radius:14px}
+  #content .sum{gap:7px}
+  #content .sum>div{min-height:76px;padding:10px}
+  #content .sum small{font-size:.6rem}
+  #content .sum b{font-size:1rem}
+  #content .top{grid-template-columns:1fr 1fr;gap:9px}
+  #content .top>div:first-child{grid-column:1/-1}
+  #content table{font-size:.78rem}
+}
+@media(prefers-reduced-motion:reduce){
+  #content>section{animation:none}
+  #content .card{transition:none}
+}
+
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */

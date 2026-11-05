@@ -594,6 +594,44 @@ th{background:var(--bg);color:var(--mut)}
   #content .card{transition:none}
 }
 
+
+/* ===== Ajustement du tableau de bord et vraie barre latérale pleine hauteur ===== */
+@media(min-width:880px){
+  main{width:100%;max-width:1680px;padding-left:clamp(18px,2.2vw,34px);padding-right:clamp(18px,2.2vw,34px)}
+  .appgrid{grid-template-columns:252px minmax(0,1fr);gap:22px;align-items:stretch}
+  .tabs{
+    position:sticky;top:12px;align-self:start;
+    height:calc(100vh - 24px);min-height:600px;box-sizing:border-box;
+    padding:22px 14px 18px;border-radius:18px;
+    display:flex;flex-direction:column;gap:7px;
+    background:linear-gradient(180deg,var(--card),color-mix(in srgb,var(--pri) 4%,var(--card)));
+    border:1px solid var(--line);box-shadow:0 12px 32px rgba(17,48,35,.09);
+  }
+  .tabs:before{padding:4px 12px 17px;margin-bottom:5px;border-bottom:1px solid var(--line)}
+  .tabs button{min-height:48px;padding:11px 13px;font-size:.88rem;border-radius:12px}
+  .tabs button .icon{width:21px;height:21px;flex-basis:21px}
+  #content{min-width:0;padding:0 0 36px}
+  #content>section{max-width:100%;margin:0 auto}
+  .ese-dashboard{display:grid;grid-template-columns:minmax(0,1fr);gap:13px;margin:0 0 18px}
+  .ese-hero{min-height:150px;padding:25px 32px;border-radius:19px}
+  .ese-hero-copy{max-width:780px}
+  .ese-hero h1{font-size:clamp(1.7rem,2.3vw,2.25rem)}
+  .ese-shortcuts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:0}
+  .ese-shortcuts button{justify-content:center;min-height:52px;padding:10px 12px;font-size:.82rem}
+  #content .card.top.wide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:end;padding:16px 19px}
+  #content .sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:15px 0 19px}
+  #content .sum>div{min-height:98px;padding:15px 16px;display:flex;flex-direction:column;justify-content:center}
+  #content .sum small{font-size:.68rem;letter-spacing:.55px}
+  #content .sum b{font-size:clamp(1.05rem,1.4vw,1.4rem);overflow-wrap:anywhere}
+}
+@media(min-width:880px) and (max-height:680px){
+  .tabs{height:calc(100vh - 24px);min-height:0;overflow-y:auto}
+}
+@media(max-width:879px){
+  .ese-dashboard{display:block}
+  .ese-shortcuts{margin-top:12px}
+}
+
 </style>
 <script>
 /* Appliquer le thème mémorisé avant l'affichage, sans suivre le thème du navigateur */
